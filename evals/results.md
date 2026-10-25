@@ -1,13 +1,13 @@
 # Atelier AI Evaluation Report
 
-**Generated on:** 2026-10-25T13:57:32.128Z
+**Generated on:** 2026-10-25T14:21:00.734Z
 
 ## 1. Hybrid Semantic Search Evals (40 Scenarios)
 | Metric | Result | Target Benchmark | Status |
 | :--- | :--- | :--- | :--- |
 | **Hit@5** | **90.0%** | $\ge 85.0\%$ | ✅ PASS |
 | **MRR (Mean Reciprocal Rank)** | **0.887** | $\ge 0.700$ | ✅ PASS |
-| **Mean Search Latency** | **60ms** | $< 800\text{ms}$ | ✅ PASS |
+| **Mean Search Latency** | **63ms** | $< 800\text{ms}$ | ✅ PASS |
 
 ## 2. Shopping Assistant & Guardrail Evals (25 Scenarios)
 | Category | Pass Rate | Target | Status |
