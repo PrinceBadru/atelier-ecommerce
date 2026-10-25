@@ -27,7 +27,7 @@ const CATEGORIES_DATA = [
 
 /**
  * Dedicated, authentic, high-resolution imagery specifically tailored to each product archetype.
- * Every product archetype has verified, non-repeating artisanal photographs.
+ * Every product archetype has verified, non-repeating artisanal photographs matching its exact item name.
  */
 const ITEM_SPECIFIC_IMAGES: Record<string, string[]> = {
   // 1. Stoneware Pour-Over Dripper
@@ -39,20 +39,20 @@ const ITEM_SPECIFIC_IMAGES: Record<string, string[]> = {
   // 2. Ceramic Tea Bowl (Matcha Chawan)
   "Ceramic Tea Bowl": [
     "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1753009712810-3f72c3f72548?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1565117683158-aa1cb4a51c4d?auto=format&fit=crop&w=800&q=80",
   ],
   // 3. Dinner Plate Set
   "Dinner Plate Set of 4": [
+    "https://images.unsplash.com/photo-1591632288574-a387f820a1ca?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1551807306-4bcd16b92a41?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1603199506695-1f95479cb2ea?auto=format&fit=crop&w=800&q=80",
   ],
   // 4. Pitcher & Basin
   "Pitcher & Basin": [
-    "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1641083993161-4240941837e6?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1534516484460-0b6099615d5a?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1656088239658-ca839d7e8841?auto=format&fit=crop&w=800&q=80",
   ],
   // 5. Heavyweight Linen Throw
   "Heavyweight Linen Throw": [
@@ -62,94 +62,93 @@ const ITEM_SPECIFIC_IMAGES: Record<string, string[]> = {
   ],
   // 6. Linen Bath Sheet (Waffle Weave)
   "Linen Bath Sheet": [
+    "https://images.unsplash.com/photo-1766727923658-ae4d4d837239?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1616627547584-bf28cee262db?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=800&q=80",
   ],
   // 7. Linen Table Runner
   "Linen Table Runner": [
     "https://images.unsplash.com/photo-1528458909336-e7a0adfed0a5?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1758810743610-66068a59c5bc?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
   ],
   // 8. Pre-Seasoned Cast Iron Skillet (REAL black skillet, no instant pots)
   "Cast Iron Skillet (10-Inch)": [
-    "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1606374894242-19110fdbd56c?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1760322327906-397d8c28de1b?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1612477491914-a2f46ef8586e?auto=format&fit=crop&w=800&q=80",
   ],
   // 9. Carbon Steel Dutch Oven
   "Carbon Steel Dutch Oven": [
-    "https://images.unsplash.com/photo-1585515320310-259814833e62?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1584990347449-34b3f8dbdbf0?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1766746842414-e7a999ca83ce?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1780931648735-efe041af8d3a?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1584383010033-29d82105afaf?auto=format&fit=crop&w=800&q=80",
   ],
   // 10. Waxed Canvas Field Bag
   "Waxed Canvas Field Bag": [
     "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1577733975197-3b950ca5cabe?auto=format&fit=crop&w=800&q=80",
   ],
   // 11. Waxed Canvas Tool Roll
   "Waxed Canvas Tool Roll": [
+    "https://images.unsplash.com/photo-1505128788193-9b2fcd6de977?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1643834479004-0b53b6b87f4b?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=800&q=80",
   ],
   // 12. Ultralight Camp Stove
   "Ultralight Camp Stove": [
+    "https://images.unsplash.com/photo-1520963959303-a5cc3bdf9260?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1749496600182-a4c4ca08dd8e?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=800&q=80",
   ],
   // 13. Deep Camp Bowl & Mug Set
   "Deep Camp Bowl & Mug Set": [
-    "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1589875702444-4fb37c1b8313?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=800&q=80",
   ],
-  // 14. Pure Beeswax Taper Candles
+  // 14. Pure Beeswax Taper Candles (NO controllers! Authentic slender beeswax taper candles)
   "Taper Candles (Pair)": [
-    "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1572726729437-373264426549?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1545666215-c5fbc4a9f4fd?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1640095889747-2090ee12fa7d?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1601479604588-68d9e6d386b5?auto=format&fit=crop&w=800&q=80",
   ],
-  // 15. Solid Brass Minimalist Candleholder
+  // 15. Solid Brass Minimalist Candleholder (NO wall pictures! Turned brass & black holders)
   "Minimalist Candleholder": [
-    "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1729087176894-778570ba2bf8?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1485364103940-e8aff191ed1e?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1603703467600-57e385ec81f7?auto=format&fit=crop&w=800&q=80",
   ],
-  // 16. Walnut End-Grain Chopping Block
+  // 16. Walnut End-Grain Chopping Block (NO paper bags! Real wooden cutting boards)
   "End-Grain Chopping Block": [
-    "https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1624811533744-f85d5325d49c?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1666013942797-9daa4b8b3b4f?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1587132117816-061b35073a4e?auto=format&fit=crop&w=800&q=80",
   ],
-  // 17. Cherrywood Cooking Spoon Set
+  // 17. Cherrywood Cooking Spoon Set (NO snowflakes! Real hand-carved wooden spoons)
   "Cherrywood Cooking Spoon Set": [
-    "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1516715094483-75da7dee9758?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1549859455-746ef4fae03b?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1759523091199-14f987919622?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1580151820172-ae6491498c54?auto=format&fit=crop&w=800&q=80",
   ],
-  // 18. Japanese Hinoki Wood & Cedar Incense (NO hikers! Real incense sticks & ceramic holders)
+  // 18. Japanese Hinoki Wood & Cedar Incense (NO hikers or cosmetic droppers! Real incense sticks)
   "Hinoki Wood & Cedar Incense": [
+    "https://images.unsplash.com/photo-1783142978783-c141673fe042?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1767185623395-b518030c6d5e?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1602928321679-560bb453f190?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80",
   ],
-  // 19. Forged Steel Hori-Hori Garden Trowel
+  // 19. Forged Steel Hori-Hori Garden Trowel (NO potted cactus! Real forged garden spade)
   "Hori-Hori Garden Trowel": [
     "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=800&q=80",
     "https://images.unsplash.com/photo-1589051039485-d409c671cb65?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1781521215146-5aa55e800b0d?auto=format&fit=crop&w=800&q=80",
   ],
-  // 20. Raw Copper Indoor Watering Can
+  // 20. Raw Copper Indoor Watering Can (NO trees or bonsai! Real metal watering cans)
   "Indoor Watering Can": [
-    "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1599277100479-3252d492a19a?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1645111094670-9d51f0f63d65?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1667992714862-df8713baf8c6?auto=format&fit=crop&w=800&q=80",
   ],
 };
 
