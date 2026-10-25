@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color tokens - Warm Minimalist Atelier (Light) */
+    --background: 40 20% 98%;           /* #faf8f5 Warm linen */
+    --surface: 0 0% 100%;               /* #ffffff Clean white surface */
+    --foreground: 24 10% 10%;           /* #1c1917 Dark charcoal */
+    
+    --muted: 36 15% 93%;               /* #eeebe5 Soft sand */
+    --muted-foreground: 25 5% 45%;      /* #78716c Warm gray */
+    
+    --border: 36 15% 88%;              /* #e4dfd7 Gentle border */
+    --input: 36 15% 88%;
+    --ring: 24 10% 10%;
+    
+    --primary: 24 10% 12%;             /* #23201e Solid charcoal */
+    --primary-foreground: 40 20% 98%;
+    
+    --accent: 25 35% 45%;              /* #9b6b43 Warm terracotta / crafted bronze */
+    --accent-foreground: 0 0% 100%;
+    
+    --success: 152 40% 36%;            /* #37815b Forest pine */
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 85% 48%;             /* #dc9b18 Amber Ochre */
+    --warning-foreground: 24 10% 10%;
+    
+    --danger: 0 65% 50%;               /* #d43b3b Rust red */
+    --danger-foreground: 0 0% 100%;
+
+    /* Radius: 3 sizes */
+    --radius-sm: 0.25rem;  /* 4px */
+    --radius-md: 0.5rem;   /* 8px */
+    --radius-lg: 0.875rem; /* 14px */
+
+    /* Elevation: 3 shadows */
+    --shadow-1: 0 1px 2px 0 rgba(28, 25, 23, 0.05);
+    --shadow-2: 0 4px 12px -2px rgba(28, 25, 23, 0.08), 0 2px 4px -2px rgba(28, 25, 23, 0.04);
+    --shadow-3: 0 16px 32px -4px rgba(28, 25, 23, 0.12), 0 6px 12px -4px rgba(28, 25, 23, 0.06);
+
+    /* Typography */
+    --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .dark {
+    /* Color tokens - Warm Minimalist Atelier (Dark) */
+    --background: 24 10% 8%;            /* #161413 Deep umber charcoal */
+    --surface: 24 9% 12%;               /* #211e1c Elevated surface */
+    --foreground: 40 20% 95%;           /* #f4f1ec Crisp warm ivory */
+    
+    --muted: 24 8% 18%;                /* #302b28 Muted backdrop */
+    --muted-foreground: 36 10% 65%;     /* #aba49c Lightened stone */
+    
+    --border: 24 8% 20%;               /* #36312d Muted boundary */
+    --input: 24 8% 20%;
+    --ring: 40 20% 95%;
+    
+    --primary: 40 20% 95%;             /* Light text / button */
+    --primary-foreground: 24 10% 10%;
+    
+    --accent: 25 45% 58%;              /* Warm luminous bronze */
+    --accent-foreground: 24 10% 10%;
+    
+    --success: 152 45% 48%;
+    --success-foreground: 24 10% 10%;
+    
+    --warning: 38 85% 58%;
+    --warning-foreground: 24 10% 10%;
+    
+    --danger: 0 65% 62%;
+    --danger-foreground: 24 10% 10%;
+
+    --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-2: 0 4px 14px -2px rgba(0, 0, 0, 0.45);
+    --shadow-3: 0 18px 36px -4px rgba(0, 0, 0, 0.65);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Accessible focus visible rings */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

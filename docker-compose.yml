@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: atelier-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: atelier
+    ports:
+      - "5433:5432"
+    volumes:
+      - atelier_pgdata:/var/lib/postgresql/data
+
+volumes:
+  atelier_pgdata:

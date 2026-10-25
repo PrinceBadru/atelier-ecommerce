@@ -1,0 +1,40 @@
+{"query": "hand thrown ceramic coffee dripper", "expectedCategory": "ceramics-tableware", "expectedTags": ["coffee", "ceramics"]}
+{"query": "japanese matcha tea bowl with textured glaze", "expectedCategory": "ceramics-tableware", "expectedTags": ["tea", "ceramics"]}
+{"query": "durable stoneware dinner plates for four", "expectedCategory": "ceramics-tableware", "expectedTags": ["dining", "plates"]}
+{"query": "raw clay water pitcher and basin", "expectedCategory": "ceramics-tableware", "expectedTags": ["vessel", "home"]}
+{"query": "cozy heavyweight belgian linen throw blanket", "expectedCategory": "linen-textiles", "expectedTags": ["linen", "living"]}
+{"query": "breathable waffle weave bath sheet towel", "expectedCategory": "linen-textiles", "expectedTags": ["linen", "bath"]}
+{"query": "natural organic linen table runner for dining table", "expectedCategory": "linen-textiles", "expectedTags": ["dining", "linen"]}
+{"query": "10 inch seasoned cast iron skillet for campfire", "expectedCategory": "cast-iron-cookware", "expectedTags": ["cooking", "cast iron"]}
+{"query": "hand forged carbon steel dutch oven for baking sourdough", "expectedCategory": "cast-iron-cookware", "expectedTags": ["cookware", "baking"]}
+{"query": "weatherproof waxed canvas field bag with brass hardware", "expectedCategory": "waxed-canvas-bags", "expectedTags": ["bags", "canvas"]}
+{"query": "oiled leather canvas roll for kitchen knives", "expectedCategory": "waxed-canvas-bags", "expectedTags": ["storage", "canvas"]}
+{"query": "ultralight titanium wood burning backpacking stove", "expectedCategory": "camp-trail-essentials", "expectedTags": ["camping", "trail"]}
+{"query": "double dipped enamel camp bowl and mug set", "expectedCategory": "camp-trail-essentials", "expectedTags": ["camping", "cookware"]}
+{"query": "natural beeswax hand dipped taper candles", "expectedCategory": "lighting-candles", "expectedTags": ["candles", "beeswax"]}
+{"query": "solid brass turned candleholder with natural patina", "expectedCategory": "lighting-candles", "expectedTags": ["brass", "lighting"]}
+{"query": "end grain walnut wood chopping block", "expectedCategory": "wooden-goods", "expectedTags": ["wood", "cutting board"]}
+{"query": "hand carved cherrywood cooking spoons", "expectedCategory": "wooden-goods", "expectedTags": ["wood", "utensils"]}
+{"query": "calming japanese hinoki cypress and cedar incense", "expectedCategory": "aromatics-incense", "expectedTags": ["incense", "wellness"]}
+{"query": "japanese hori hori forged garden trowel", "expectedCategory": "gardening-botany", "expectedTags": ["gardening", "tools"]}
+{"query": "long spout copper indoor watering can for bonsai", "expectedCategory": "gardening-botany", "expectedTags": ["plants", "copper"]}
+{"query": "gift for a coffee lover under 50", "expectedCategory": "ceramics-tableware", "maxPrice": 50}
+{"query": "something warm for hiking in the rain", "expectedCategory": "waxed-canvas-bags"}
+{"query": "sustainable kitchen cutting board", "expectedCategory": "wooden-goods"}
+{"query": "earthy minimalist bedroom lighting", "expectedCategory": "lighting-candles"}
+{"query": "artisan table setting essentials", "expectedCategory": "ceramics-tableware"}
+{"query": "outdoor campfire cooking pan", "expectedCategory": "cast-iron-cookware"}
+{"query": "pure flax bedding blanket", "expectedCategory": "linen-textiles"}
+{"query": "handcrafted garden tools", "expectedCategory": "gardening-botany"}
+{"query": "natural room fragrance and scent", "expectedCategory": "aromatics-incense"}
+{"query": "sturdy canvas travel duffle", "expectedCategory": "waxed-canvas-bags"}
+{"query": "matte black volcanic stoneware cup", "expectedCategory": "ceramics-tableware"}
+{"query": "thick absorbent bath towels", "expectedCategory": "linen-textiles"}
+{"query": "heirloom roasting pot with lid", "expectedCategory": "cast-iron-cookware"}
+{"query": "camp kitchen cooking essentials", "expectedCategory": "camp-trail-essentials"}
+{"query": "brass dining table centerpiece", "expectedCategory": "lighting-candles"}
+{"query": "wooden salad serving spoons", "expectedCategory": "wooden-goods"}
+{"query": "temple incense sticks", "expectedCategory": "aromatics-incense"}
+{"query": "indoor houseplant copper mister", "expectedCategory": "gardening-botany"}
+{"query": "minimalist ceramic bowl", "expectedCategory": "ceramics-tableware"}
+{"query": "heavyweight waxed cotton backpack", "expectedCategory": "waxed-canvas-bags"}
