@@ -31,13 +31,16 @@ async function runAllAuthTests() {
   // Robust cookie extractor that captures all set-cookies (both standard and __Secure-)
   function extractCookie(res: Response): string {
     const getSetCookie = (res.headers as any).getSetCookie;
-    const cookieList: string[] =
-      typeof getSetCookie === "function"
-        ? getSetCookie.call(res.headers)
-        : [res.headers.get("set-cookie") || ""];
-
-    return cookieList
-      .flatMap((c) => (c ? c.split(",") : []))
+    if (typeof getSetCookie === "function") {
+      const list: string[] = getSetCookie.call(res.headers);
+      return list
+        .map((c) => c.split(";")[0].trim())
+        .filter((c) => c.includes("="))
+        .join("; ");
+    }
+    const raw = res.headers.get("set-cookie") || "";
+    return raw
+      .split(/,(?=[^;]+?=)/)
       .map((c) => c.split(";")[0].trim())
       .filter((c) => c.includes("="))
       .join("; ");
@@ -160,8 +163,18 @@ async function runAllAuthTests() {
     }
 
     const cookie = extractCookie(res);
+    if (cookie) registeredCookie = cookie;
     const data = await res.json();
-    return `Signed in successfully as ${data.user?.email} (Session Token issued: ${Boolean(cookie)})`;
+
+    // Verify introspecting session with the newly issued registered credential cookie
+    const sessionCheck = await fetch(`${BASE_URL}/api/auth/get-session`, {
+      headers: { ...defaultHeaders, Cookie: registeredCookie },
+    });
+    if (!sessionCheck.ok) {
+      throw new Error(`Session introspection failed for signed-in user: HTTP ${sessionCheck.status}`);
+    }
+    const sessionData = await sessionCheck.json();
+    return `Signed in successfully as ${data.user?.email} (Verified session user: ${sessionData?.user?.email})`;
   });
 
   // 8. Test Invalid Credentials Rejection

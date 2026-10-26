@@ -47,7 +47,7 @@ export const userProfiles = pgTable("user_profiles", {
 
 // Better Auth tables support
 export const sessions = pgTable("sessions", {
-  id: text("id").primaryKey(),
+  id: text("id").default(sql`gen_random_uuid()::text`).primaryKey(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
@@ -58,7 +58,7 @@ export const sessions = pgTable("sessions", {
 });
 
 export const accounts = pgTable("accounts", {
-  id: text("id").primaryKey(),
+  id: text("id").default(sql`gen_random_uuid()::text`).primaryKey(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
@@ -75,7 +75,7 @@ export const accounts = pgTable("accounts", {
 });
 
 export const verifications = pgTable("verifications", {
-  id: text("id").primaryKey(),
+  id: text("id").default(sql`gen_random_uuid()::text`).primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),

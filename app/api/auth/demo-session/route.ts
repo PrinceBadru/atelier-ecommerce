@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       expiresAt,
     });
 
-    // 3. Set Better Auth session cookie
+    // 3. Set Better Auth HMAC-signed session cookie
     const isProd = process.env.NODE_ENV === "production";
     const cookieOptions = {
       path: "/",
@@ -57,6 +57,12 @@ export async function POST(req: NextRequest) {
       secure: isProd,
       expires: expiresAt,
     };
+
+    const secret =
+      process.env.BETTER_AUTH_SECRET ||
+      "atelier_demo_better_auth_secret_minimum_32_characters_long";
+    const signature = crypto.createHmac("sha256", secret).update(token).digest("base64");
+    const signedValue = `${token}.${signature}`;
 
     const response = NextResponse.json({
       success: true,
@@ -68,9 +74,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    response.cookies.set("better-auth.session_token", token, cookieOptions);
+    response.cookies.set("better-auth.session_token", signedValue, cookieOptions);
     if (isProd) {
-      response.cookies.set("__Secure-better-auth.session_token", token, cookieOptions);
+      response.cookies.set("__Secure-better-auth.session_token", signedValue, cookieOptions);
     }
 
     return response;
