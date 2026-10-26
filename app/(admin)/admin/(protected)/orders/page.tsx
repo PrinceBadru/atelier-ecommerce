@@ -16,19 +16,7 @@ export default async function AdminOrdersPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="h-16 border-b border-border bg-surface px-6 flex items-center justify-between">
-        <Link
-          href="/admin"
-          className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to Dashboard
-        </Link>
-        <span className="font-display text-scale-20">Atelier Studio Admin</span>
-        <div className="w-16" />
-      </header>
-
-      <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
+    <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
         <div className="flex justify-between items-center">
           <div>
             <span className="text-xs uppercase tracking-wider text-accent font-medium">Fulfillment</span>
@@ -88,6 +76,5 @@ export default async function AdminOrdersPage() {
           </div>
         </div>
       </main>
-    </div>
-  );
+    );
 }

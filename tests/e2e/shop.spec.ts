@@ -46,9 +46,17 @@ test.describe("Atelier Storefront & Journey Verification", () => {
     await expect(page.getByText(/4242 •••• •••• 4242/i)).toBeVisible();
   });
 
-  test("admin dashboard is accessible with key sales metrics", async ({ page }) => {
+  test("protects admin dashboard and redirects unauthenticated visitors to admin login", async ({ page }) => {
     await page.goto("/admin");
-    await expect(page.getByRole("heading", { name: /Executive Dashboard/i })).toBeVisible();
-    await expect(page.getByText(/AI Sales Intelligence/i)).toBeVisible();
+    await expect(page).toHaveURL(/.*admin\/login/);
+    await expect(page.getByRole("heading", { name: /Atelier Studio Portal/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Access Studio Admin/i })).toBeVisible();
+  });
+
+  test("protects customer account and redirects unauthenticated visitors to login", async ({ page }) => {
+    await page.goto("/account");
+    await expect(page).toHaveURL(/.*login/);
+    await expect(page.getByRole("heading", { name: /Welcome Back/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Sign In/i })).toBeVisible();
   });
 });

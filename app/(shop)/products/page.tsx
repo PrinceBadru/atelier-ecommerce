@@ -7,7 +7,7 @@ import { FilterBar } from "@/components/shop/FilterBar";
 import { searchProducts } from "@/lib/ai/search";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ShoppingBag, ArrowRight } from "lucide-react";
+import { Sparkles, ShoppingBag, ArrowRight, User } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "All Products — Atelier Considered Goods",
@@ -162,10 +162,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           <Link href="/" className="font-display text-scale-24 font-normal tracking-tight">
             Atelier
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <Link href="/account">
+              <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
+                <User className="w-3.5 h-3.5 mr-1.5" /> Account
+              </Button>
+            </Link>
             <Link href="/cart">
               <Button variant="outline" size="sm" className="text-xs">
-                <ShoppingBag className="w-4 h-4 mr-1.5" /> Cart
+                <ShoppingBag className="w-3.5 h-3.5 mr-1.5" /> Cart
               </Button>
             </Link>
           </div>

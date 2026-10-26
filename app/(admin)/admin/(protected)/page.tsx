@@ -46,40 +46,7 @@ export default async function AdminDashboardPage() {
     .where(eq(products.status, "active"));
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Admin Nav */}
-      <header className="h-16 border-b border-border bg-surface px-6 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="font-display text-scale-20">
-            Atelier Studio
-          </Link>
-          <nav className="flex items-center gap-4 text-xs font-medium">
-            <Link href="/admin" className="text-accent">
-              Dashboard
-            </Link>
-            <Link href="/admin/products" className="text-muted-foreground hover:text-foreground">
-              Products
-            </Link>
-            <Link href="/admin/orders" className="text-muted-foreground hover:text-foreground">
-              Orders
-            </Link>
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link href="/products">
-            <Button variant="outline" size="sm" className="text-xs">
-              View Live Storefront
-            </Button>
-          </Link>
-          <Badge variant="accent" className="text-xs">
-            Admin: admin@atelier.dev
-          </Badge>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+    <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
         {/* Top Header & AI Explain Action */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -243,6 +210,5 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
       </main>
-    </div>
-  );
+    );
 }

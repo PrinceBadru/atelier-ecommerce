@@ -19,6 +19,7 @@ import {
   RotateCcw,
   Sparkles,
   ArrowLeft,
+  User,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -151,11 +152,18 @@ export default async function ProductDetailPage({
               Atelier
             </Link>
           </div>
-          <Link href="/cart">
-            <Button variant="outline" size="sm" className="text-xs">
-              <ShoppingBag className="w-4 h-4 mr-1.5" /> Cart
-            </Button>
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/account">
+              <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
+                <User className="w-3.5 h-3.5 mr-1.5" /> Account
+              </Button>
+            </Link>
+            <Link href="/cart">
+              <Button variant="outline" size="sm" className="text-xs">
+                <ShoppingBag className="w-3.5 h-3.5 mr-1.5" /> Cart
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 

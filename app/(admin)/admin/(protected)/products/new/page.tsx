@@ -111,19 +111,7 @@ export default function NewProductAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="h-16 border-b border-border bg-surface px-6 flex items-center justify-between">
-        <Link
-          href="/admin"
-          className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to Dashboard
-        </Link>
-        <span className="font-display text-scale-20">Atelier Studio Admin</span>
-        <div className="w-16" />
-      </header>
-
-      <main className="flex-1 max-w-3xl mx-auto px-4 py-10 w-full space-y-8">
+    <main className="flex-1 max-w-3xl mx-auto px-4 py-10 w-full space-y-8">
         <div>
           <span className="text-xs uppercase tracking-wider text-accent font-medium">Catalog Studio</span>
           <h1 className="font-display text-scale-32 font-normal mt-1">Publish New Workshop Product</h1>
@@ -254,6 +242,5 @@ export default function NewProductAdminPage() {
           </div>
         </form>
       </main>
-    </div>
-  );
+    );
 }
