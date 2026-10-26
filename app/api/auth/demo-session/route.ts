@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const provider = body.provider as string | undefined;
 
-    let targetRole = body.role === "admin" ? "admin" : "shopper";
+    const targetRole: "shopper" | "admin" = body.role === "admin" ? "admin" : "shopper";
     let targetEmail = targetRole === "admin" ? "admin@atelier.dev" : "demo@atelier.dev";
     let targetName = targetRole === "admin" ? "Admin Demo" : "Shopper Demo";
     let targetImage: string | null = null;
