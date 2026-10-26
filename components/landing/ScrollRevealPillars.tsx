@@ -42,18 +42,24 @@ export function ScrollRevealPillars() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {PILLARS.map((pillar) => {
+          {PILLARS.map((pillar, idx) => {
             const Icon = pillar.icon;
+            const number = `0${idx + 1}`;
             return (
               <SpotlightCard
                 key={pillar.title}
-                className="p-8 flex flex-col justify-between space-y-6 bg-surface hover:border-accent/40 transition-colors"
+                className="group p-8 flex flex-col justify-between space-y-6 bg-surface hover:border-accent transition-all relative overflow-hidden"
               >
-                <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shadow-sm">
+                {/* Large Background Watermark Numeral */}
+                <span className="pointer-events-none absolute -bottom-4 -right-2 font-display text-[120px] font-normal leading-none text-muted/20 group-hover:text-accent/15 transition-colors select-none z-0">
+                  {number}
+                </span>
+
+                <div className="space-y-4 relative z-10">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shadow-sm group-hover:scale-110 group-hover:bg-accent/20 group-hover:border-accent transition-all duration-300">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="font-display text-scale-20 font-medium text-foreground">
+                  <h3 className="font-display text-scale-20 font-medium text-foreground group-hover:text-accent transition-colors">
                     {pillar.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
@@ -61,9 +67,12 @@ export function ScrollRevealPillars() {
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-border/60">
-                  <span className="text-[11px] font-mono tracking-wider text-accent uppercase">
+                <div className="pt-4 border-t border-border/60 relative z-10 flex items-center justify-between">
+                  <span className="text-[11px] font-mono tracking-wider text-accent uppercase font-medium">
                     {pillar.tag}
+                  </span>
+                  <span className="text-xs font-mono text-muted-foreground/60">
+                    Pillar {number}
                   </span>
                 </div>
               </SpotlightCard>

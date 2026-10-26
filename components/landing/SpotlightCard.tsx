@@ -30,9 +30,9 @@ export function SpotlightCard({
     if (enableTilt) {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      // Maximum 6 degrees tilt for tasteful luxury restraint
-      const rotateX = Number((((y - centerY) / centerY) * -5).toFixed(2));
-      const rotateY = Number((((x - centerX) / centerX) * 5).toFixed(2));
+      // Increased dynamic tilt for unmistakable 3D physical depth
+      const rotateX = Number((((y - centerY) / centerY) * -8.5).toFixed(2));
+      const rotateY = Number((((x - centerX) / centerX) * 8.5).toFixed(2));
       setTilt({ rotateX, rotateY });
     }
   };
@@ -52,13 +52,13 @@ export function SpotlightCard({
       onMouseLeave={handleMouseLeave}
       style={{
         transform: isHovered
-          ? `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateZ(6px)`
-          : "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)",
+          ? `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateZ(12px) translateY(-4px)`
+          : "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) translateY(0px)",
         transition: isHovered
-          ? "transform 0.15s ease-out"
-          : "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+          ? "transform 0.12s ease-out"
+          : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className={`relative rounded-2xl border border-border/80 bg-surface/90 overflow-hidden shadow-elevation1 transition-shadow duration-500 hover:shadow-elevation3 ${className}`}
+      className={`relative rounded-2xl border border-border/80 bg-surface/90 overflow-hidden shadow-elevation1 transition-all duration-500 hover:shadow-elevation3 hover:border-accent/60 will-change-transform ${className}`}
       {...props}
     >
       {/* 1. Dynamic Cursor Spotlight (Illuminates border and surface) */}
@@ -66,28 +66,38 @@ export function SpotlightCard({
         className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(400px circle at ${coords.x}px ${coords.y}px, hsl(var(--accent) / 0.15), transparent 70%)`,
+          background: `radial-gradient(500px circle at ${coords.x}px ${coords.y}px, hsl(var(--accent) / 0.22), transparent 70%)`,
         }}
         aria-hidden="true"
       />
 
-      {/* 2. Concentrated Border Glow */}
+      {/* 2. Specular Surface Glare Sheen */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 mix-blend-overlay"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(255, 255, 255, 0.18), transparent 60%)`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* 3. Concentrated Border Glow */}
       <div
         className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(220px circle at ${coords.x}px ${coords.y}px, hsl(var(--accent) / 0.4), transparent 60%)`,
+          background: `radial-gradient(280px circle at ${coords.x}px ${coords.y}px, hsl(var(--accent) / 0.7), transparent 60%)`,
           mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMask:
             "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           maskComposite: "exclude",
           WebkitMaskComposite: "xor",
-          padding: "1px",
+          padding: "1.5px",
         }}
         aria-hidden="true"
       />
 
-      {/* 3. Card Content */}
+      {/* 4. Card Content */}
       <div className="relative z-10 h-full">{children}</div>
     </div>
   );

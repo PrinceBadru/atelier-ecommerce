@@ -23,6 +23,17 @@ export function StorefrontHeader() {
   const { data: session } = authClient.useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [cartCount, setCartCount] = React.useState<number>(0);
+  const [cartPop, setCartPop] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+
+  // Sync scroll elevation
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 12);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Sync cart count
   const refreshCartCount = React.useCallback(async () => {
@@ -46,6 +57,8 @@ export function StorefrontHeader() {
 
     const handleAdd = () => {
       refreshCartCount();
+      setCartPop(true);
+      setTimeout(() => setCartPop(false), 500);
     };
 
     window.addEventListener("atelier:add-to-cart", handleAdd);
@@ -66,7 +79,13 @@ export function StorefrontHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-surface/85 backdrop-blur-md border-b border-border transition-colors">
+      <header
+        className={`sticky top-0 z-40 transition-all duration-300 ${
+          isScrolled
+            ? "bg-surface/90 backdrop-blur-xl border-b border-border shadow-elevation2 py-0"
+            : "bg-surface/75 backdrop-blur-md border-b border-border/80"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Left: Brand & Desktop Nav */}
           <div className="flex items-center gap-8">
@@ -127,13 +146,23 @@ export function StorefrontHeader() {
               </Link>
             )}
 
-            {/* Shopping Bag with Dynamic Counter */}
+            {/* Shopping Bag with Dynamic Counter & Pop Animation */}
             <Link href="/cart">
-              <Button variant="outline" size="sm" className="text-xs gap-1.5 relative">
-                <ShoppingBag className="w-3.5 h-3.5" />
+              <Button
+                variant="outline"
+                size="sm"
+                className={`text-xs gap-1.5 relative transition-all duration-300 ${
+                  cartPop ? "scale-105 border-accent text-accent" : ""
+                }`}
+              >
+                <ShoppingBag className={`w-3.5 h-3.5 ${cartPop ? "animate-bounce" : ""}`} />
                 <span className="hidden sm:inline">Bag</span>
                 {cartCount > 0 && (
-                  <span className="ml-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none bg-accent text-accent-foreground rounded-full">
+                  <span
+                    className={`ml-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none bg-accent text-accent-foreground rounded-full transition-transform ${
+                      cartPop ? "animate-cart-pop scale-125" : ""
+                    }`}
+                  >
                     {cartCount}
                   </span>
                 )}

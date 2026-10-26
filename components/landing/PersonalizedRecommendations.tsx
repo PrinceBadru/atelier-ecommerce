@@ -147,9 +147,9 @@ export function PersonalizedRecommendations() {
                     )}
 
                     <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-md text-[11px] font-mono font-semibold text-accent border border-accent/30 shadow-sm">
-                        <Sparkles className="w-3 h-3" />
-                        <span>{item.matchScore}% Match</span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background/95 backdrop-blur-md text-[11px] font-mono font-semibold text-accent border border-accent/50 shadow-[0_0_15px_-2px_hsl(var(--accent)/0.4)]">
+                        <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
+                        <span>{item.matchScore}% Taste Match</span>
                       </span>
                     </div>
 

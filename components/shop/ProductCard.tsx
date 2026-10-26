@@ -63,18 +63,20 @@ export function ProductCard({
   const isLowStock = inStock && stockQuantity !== undefined && stockQuantity <= 3 && stockQuantity > 0;
 
   return (
-    <Card className="group overflow-hidden rounded-lg border border-border bg-surface transition-all duration-320 hover:border-accent/40 hover:shadow-elevation2 flex flex-col h-full">
+    <Card className="group overflow-hidden rounded-xl border border-border bg-surface transition-all duration-300 hover:border-accent hover:shadow-elevation3 hover:-translate-y-1 flex flex-col h-full relative">
       <Link href={`/products/${slug}`} className="flex-1 flex flex-col">
-        {/* Product Image */}
+        {/* Product Image with Hover Zoom & Floating Action */}
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
           <Image
             src={imageUrl}
             alt={name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-320 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-108 will-change-transform"
             loading="lazy"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
+          
           {matchReason && (
             <Badge
               variant="accent"
@@ -123,8 +125,8 @@ export function ProductCard({
       </Link>
 
       {/* Footer */}
-      <CardFooter className="p-4 pt-2 flex items-center justify-between border-t border-border/50">
-        <span className="font-semibold text-scale-16 text-foreground">
+      <CardFooter className="p-4 pt-2.5 flex items-center justify-between border-t border-border/60 bg-surface/50">
+        <span className="font-semibold text-scale-16 text-foreground font-mono">
           {formatPrice(priceCents, currency)}
         </span>
         <Button
@@ -132,18 +134,20 @@ export function ProductCard({
           variant={added ? "default" : "outline"}
           disabled={!inStock || isAdding}
           onClick={handleAdd}
-          className="text-xs transition-all duration-200"
+          className={`text-xs transition-all duration-300 font-medium ${
+            added ? "bg-accent text-accent-foreground border-accent scale-105" : "hover:border-accent hover:text-accent"
+          }`}
           aria-label={`Add ${name} to cart`}
         >
           {added ? (
             <>
-              <Check className="w-3.5 h-3.5 mr-1 text-success-foreground" /> Added
+              <Check className="w-3.5 h-3.5 mr-1" /> Added
             </>
           ) : !inStock ? (
             "Unavailable"
           ) : (
             <>
-              <ShoppingBag className="w-3.5 h-3.5 mr-1.5" /> Add
+              <ShoppingBag className="w-3.5 h-3.5 mr-1.5 transition-transform group-hover:scale-110" /> Add to Bag
             </>
           )}
         </Button>

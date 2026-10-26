@@ -104,15 +104,90 @@
   }
 }
 
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px -3px hsl(var(--accent) / 0.35), 0 0 8px 0px hsl(var(--accent) / 0.2);
+  }
+  50% {
+    box-shadow: 0 0 35px 2px hsl(var(--accent) / 0.65), 0 0 16px 2px hsl(var(--accent) / 0.4);
+  }
+}
+
+@keyframes conic-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cart-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  75% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .animate-atelier-marquee {
   display: flex;
   width: max-content;
-  animation: atelier-marquee 40s linear infinite;
+  animation: atelier-marquee 35s linear infinite;
   will-change: transform;
 }
 
 .animate-atelier-marquee:hover {
   animation-play-state: paused;
+}
+
+.animate-gradient-flow {
+  background-size: 200% 200%;
+  animation: gradient-flow 6s ease infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-cart-pop {
+  animation: cart-pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animate-conic-spin {
+  animation: conic-spin 8s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

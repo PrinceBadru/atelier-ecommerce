@@ -74,19 +74,28 @@ export function CuratedCollections() {
           {COLLECTIONS.map((col) => (
             <Link key={col.title} href={col.href} className="group block h-full">
               <SpotlightCard className="h-full flex flex-col justify-between p-6">
-                {/* Image Preview with Hover Zoom */}
+                {/* Image Preview with Hover Zoom & Floating Pill Reveal */}
                 <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden mb-5 bg-muted">
                   <Image
                     src={col.imageUrl}
                     alt={col.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-115 will-change-transform"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                  <span className="absolute top-2.5 right-2.5 text-[10px] font-mono tracking-wider px-2 py-0.5 rounded-full bg-background/80 backdrop-blur-md text-foreground border border-border/60">
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                  
+                  <span className="absolute top-2.5 right-2.5 text-[10px] font-mono tracking-wider px-2.5 py-1 rounded-full bg-background/85 backdrop-blur-md text-foreground border border-border/80 shadow-sm transition-transform duration-300 group-hover:scale-105">
                     {col.badge}
                   </span>
+
+                  {/* Center Floating Glass Reveal on Hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-3 group-hover:translate-y-0 pointer-events-none">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-background/90 backdrop-blur-md text-xs font-medium text-foreground border border-accent/40 shadow-elevation2">
+                      <span>Explore Workshop</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                    </span>
+                  </div>
                 </div>
 
                 {/* Content */}
