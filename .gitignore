@@ -36,3 +36,6 @@ Thumbs.db
 
 # Agent memories
 .agents/
+
+# Verification screenshots
+*.png
