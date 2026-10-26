@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth/client";
@@ -66,6 +66,15 @@ function CustomerRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSocialLoading, setIsSocialLoading] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [providerConfig, setProviderConfig] = useState<{ google: boolean; github: boolean } | null>(null);
+  const [oauthNotice, setOauthNotice] = useState<{ provider: string } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/providers")
+      .then((res) => res.json())
+      .then((data) => setProviderConfig(data))
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,6 +105,10 @@ function CustomerRegisterForm() {
 
   const handleSocialSignIn = async (provider: "google" | "github") => {
     setErrorMessage("");
+    if (providerConfig && !providerConfig[provider]) {
+      setOauthNotice({ provider: provider === "google" ? "Google" : "GitHub" });
+      return;
+    }
     setIsSocialLoading(provider);
 
     try {
@@ -128,6 +141,33 @@ function CustomerRegisterForm() {
         <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3.5 flex items-start gap-3 text-xs text-destructive">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <div className="leading-relaxed">{errorMessage}</div>
+        </div>
+      )}
+
+      {oauthNotice && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-foreground space-y-2.5 animate-in fade-in duration-200">
+          <div className="font-semibold flex items-center justify-between text-amber-500">
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4" />
+              <span>{oauthNotice.provider} OAuth Setup Notice</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOauthNotice(null)}
+              className="text-muted-foreground hover:text-foreground text-xs p-1"
+            >
+              ✕
+            </button>
+          </div>
+          <p className="text-muted-foreground leading-relaxed text-[11px]">
+            Live {oauthNotice.provider} sign-in requires registering an OAuth Client ID in your {oauthNotice.provider} Developer Console:
+          </p>
+          <div className="rounded bg-background/80 p-2 font-mono text-[10px] border border-border select-all break-all text-foreground">
+            https://atelier-web-5swv.onrender.com/api/auth/callback/{oauthNotice.provider.toLowerCase()}
+          </div>
+          <p className="text-muted-foreground text-[11px]">
+            To register manually in 5 seconds, simply use the form below with your email and password.
+          </p>
         </div>
       )}
 

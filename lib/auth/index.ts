@@ -32,14 +32,40 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || "atelier-google-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "atelier-google-client-secret",
-      enabled: true,
+      clientId:
+        process.env.GOOGLE_CLIENT_ID &&
+        process.env.GOOGLE_CLIENT_ID !== "atelier-google-client-id"
+          ? process.env.GOOGLE_CLIENT_ID
+          : "unconfigured-google-client-id",
+      clientSecret:
+        process.env.GOOGLE_CLIENT_SECRET &&
+        process.env.GOOGLE_CLIENT_SECRET !== "atelier-google-client-secret"
+          ? process.env.GOOGLE_CLIENT_SECRET
+          : "unconfigured-google-client-secret",
+      enabled: Boolean(
+        process.env.GOOGLE_CLIENT_ID &&
+        process.env.GOOGLE_CLIENT_SECRET &&
+        process.env.GOOGLE_CLIENT_ID !== "atelier-google-client-id" &&
+        !process.env.GOOGLE_CLIENT_ID.includes("placeholder")
+      ),
     },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID || "atelier-github-client-id",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "atelier-github-client-secret",
-      enabled: true,
+      clientId:
+        process.env.GITHUB_CLIENT_ID &&
+        process.env.GITHUB_CLIENT_ID !== "atelier-github-client-id"
+          ? process.env.GITHUB_CLIENT_ID
+          : "unconfigured-github-client-id",
+      clientSecret:
+        process.env.GITHUB_CLIENT_SECRET &&
+        process.env.GITHUB_CLIENT_SECRET !== "atelier-github-client-secret"
+          ? process.env.GITHUB_CLIENT_SECRET
+          : "unconfigured-github-client-secret",
+      enabled: Boolean(
+        process.env.GITHUB_CLIENT_ID &&
+        process.env.GITHUB_CLIENT_SECRET &&
+        process.env.GITHUB_CLIENT_ID !== "atelier-github-client-id" &&
+        !process.env.GITHUB_CLIENT_ID.includes("placeholder")
+      ),
     },
   },
   plugins: [
