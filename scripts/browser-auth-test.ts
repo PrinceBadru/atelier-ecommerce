@@ -101,11 +101,18 @@ async function run() {
   const backupTab = await page.locator('button:has-text("Backup Code")').count();
   console.log("2FA Authenticator, Email Code, Backup Code tabs present:", authTab > 0 && emailTab > 0 && backupTab > 0);
 
-  // 8. Social OAuth Graceful Notices (Google, GitHub, Microsoft, Apple)
-  console.log("\n[TEST 8] Testing Social Providers Graceful Handling (Google, Apple, Microsoft, GitHub)...");
+  // 8. Social Direct Authentication (Google, GitHub, Microsoft, Apple)
+  console.log("\n[TEST 8] Testing Direct Social Authentication (Zero Notice, Instant Auth)...");
+  await context.clearCookies();
   await page.goto(`${baseUrl}/login`, { waitUntil: "networkidle" });
-  const socialButtons = page.locator('button[title*="Sign in with"]');
-  console.log("Social provider buttons present:", await socialButtons.count());
+  const githubBtn = page.locator('button[title*="GitHub"]');
+  console.log("GitHub button present:", (await githubBtn.count()) > 0);
+  await githubBtn.click();
+  await page.waitForTimeout(3000);
+  console.log("URL after clicking GitHub:", page.url());
+  const noticeCount = await page.locator('text=OAuth Setup Notice').count();
+  console.log("Setup notice absent (Zero notice shown):", noticeCount === 0);
+  console.log("Direct authentication succeeded & reached account:", page.url().includes("/account"));
 
   console.log("\n==================================================");
   console.log("  ALL FLARE AUTHENTICATION METHODS TESTED & VERIFIED");

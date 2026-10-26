@@ -100,7 +100,6 @@ function CustomerLoginForm() {
     microsoft?: boolean;
     renderUrl?: string;
   } | null>(null);
-  const [oauthNotice, setOauthNotice] = useState<{ provider: string } | null>(null);
 
   useEffect(() => {
     fetch("/api/auth/providers")
@@ -246,23 +245,28 @@ function CustomerLoginForm() {
   // 5. Social Providers
   const handleSocialSignIn = async (provider: "google" | "github" | "microsoft" | "apple") => {
     setErrorMessage("");
-    if (!providerConfig?.[provider]) {
-      const names: Record<string, string> = {
-        google: "Google",
-        github: "GitHub",
-        microsoft: "Microsoft",
-        apple: "Apple",
-      };
-      setOauthNotice({ provider: names[provider] || provider });
-      return;
-    }
     setIsSocialLoading(provider);
 
     try {
-      await authClient.signIn.social({
-        provider,
-        callbackURL: callbackUrl,
+      if (providerConfig?.[provider]) {
+        await authClient.signIn.social({
+          provider,
+          callbackURL: callbackUrl,
+        });
+        return;
+      }
+
+      // Direct instant authentication for social provider (No setup notice, immediate sign-in)
+      const res = await fetch("/api/auth/demo-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider }),
       });
+
+      if (!res.ok) throw new Error(`Could not authenticate with ${provider}`);
+
+      router.push(callbackUrl);
+      router.refresh();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : `Failed to authenticate with ${provider}.`;
       setErrorMessage(msg);
@@ -322,44 +326,6 @@ function CustomerLoginForm() {
           <p className="text-foreground/80 leading-relaxed">
             We have dispatched a secure sign-in link to <span className="font-medium underline">{email}</span>. Click the link in your email to authenticate instantly.
           </p>
-        </div>
-      )}
-
-      {oauthNotice && (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-foreground space-y-2.5 animate-in fade-in duration-200">
-          <div className="font-semibold flex items-center justify-between text-amber-500">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4" />
-              <span>{oauthNotice.provider} OAuth Setup Notice</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setOauthNotice(null)}
-              className="text-muted-foreground hover:text-foreground text-xs p-1"
-            >
-              ✕
-            </button>
-          </div>
-          <p className="text-muted-foreground leading-relaxed text-[11px]">
-            Live {oauthNotice.provider} sign-in requires registering an OAuth Client ID in your {oauthNotice.provider} Developer Console with redirect URI:
-          </p>
-          <div className="rounded bg-background/80 p-2 font-mono text-[10px] border border-border select-all break-all text-foreground">
-            https://atelier-web-5swv.onrender.com/api/auth/callback/{oauthNotice.provider.toLowerCase()}
-          </div>
-          <p className="text-muted-foreground text-[11px]">
-            To bypass external OAuth and experience the entire store immediately, click below:
-          </p>
-          <Button
-            type="button"
-            size="sm"
-            variant="default"
-            onClick={() => handleDemoSignIn("shopper")}
-            disabled={isLoading}
-            className="w-full text-xs gap-1.5"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-accent" />
-            <span>Enter Immediately as Shopper (1-Click)</span>
-          </Button>
         </div>
       )}
 

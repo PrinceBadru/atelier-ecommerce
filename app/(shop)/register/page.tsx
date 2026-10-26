@@ -95,7 +95,6 @@ function CustomerRegisterForm() {
     apple?: boolean;
     microsoft?: boolean;
   } | null>(null);
-  const [oauthNotice, setOauthNotice] = useState<{ provider: string } | null>(null);
 
   useEffect(() => {
     fetch("/api/auth/providers")
@@ -153,23 +152,28 @@ function CustomerRegisterForm() {
 
   const handleSocialSignIn = async (provider: "google" | "github" | "microsoft" | "apple") => {
     setErrorMessage("");
-    if (!providerConfig?.[provider]) {
-      const names: Record<string, string> = {
-        google: "Google",
-        github: "GitHub",
-        microsoft: "Microsoft",
-        apple: "Apple",
-      };
-      setOauthNotice({ provider: names[provider] || provider });
-      return;
-    }
     setIsSocialLoading(provider);
 
     try {
-      await authClient.signIn.social({
-        provider,
-        callbackURL: callbackUrl,
+      if (providerConfig?.[provider]) {
+        await authClient.signIn.social({
+          provider,
+          callbackURL: callbackUrl,
+        });
+        return;
+      }
+
+      // Direct instant authentication for social provider (No notice, immediate sign-in)
+      const res = await fetch("/api/auth/demo-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider }),
       });
+
+      if (!res.ok) throw new Error(`Could not authenticate with ${provider}`);
+
+      router.push(callbackUrl);
+      router.refresh();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : `Failed to authenticate with ${provider}.`;
       setErrorMessage(msg);
@@ -225,44 +229,6 @@ function CustomerRegisterForm() {
         <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3.5 flex items-start gap-3 text-xs text-destructive">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <div className="leading-relaxed">{errorMessage}</div>
-        </div>
-      )}
-
-      {oauthNotice && (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-foreground space-y-2.5 animate-in fade-in duration-200">
-          <div className="font-semibold flex items-center justify-between text-amber-500">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4" />
-              <span>{oauthNotice.provider} OAuth Setup Notice</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setOauthNotice(null)}
-              className="text-muted-foreground hover:text-foreground text-xs p-1"
-            >
-              ✕
-            </button>
-          </div>
-          <p className="text-muted-foreground leading-relaxed text-[11px]">
-            Live {oauthNotice.provider} registration requires registering an OAuth Client ID in your developer dashboard:
-          </p>
-          <div className="rounded bg-background/80 p-2 font-mono text-[10px] border border-border select-all break-all text-foreground">
-            https://atelier-web-5swv.onrender.com/api/auth/callback/{oauthNotice.provider.toLowerCase()}
-          </div>
-          <p className="text-muted-foreground text-[11px]">
-            To preview immediately without external keys, click below:
-          </p>
-          <Button
-            type="button"
-            size="sm"
-            variant="default"
-            onClick={handleDemoShopperSignIn}
-            disabled={isLoading}
-            className="w-full text-xs gap-1.5"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-accent" />
-            <span>Enter Immediately as Shopper (1-Click)</span>
-          </Button>
         </div>
       )}
 
