@@ -9,7 +9,15 @@ import { sql } from "drizzle-orm";
 const connectionString =
   process.env.DATABASE_URL || "postgresql://postgres:postgrespassword@localhost:5433/atelier";
 
-const client = postgres(connectionString, { max: 1 });
+const isLocal =
+  connectionString.includes("localhost") ||
+  connectionString.includes("127.0.0.1") ||
+  connectionString.includes("atelier-postgres");
+
+const client = postgres(connectionString, {
+  max: 5,
+  ssl: isLocal ? false : "require",
+});
 const db = drizzle(client, { schema });
 
 // Categories definition
