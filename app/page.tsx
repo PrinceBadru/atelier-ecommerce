@@ -3,6 +3,7 @@ import { StorefrontHeader } from "@/components/shop/StorefrontHeader";
 import { AnnouncementTicker } from "@/components/landing/AnnouncementTicker";
 import { HeroAtmosphere } from "@/components/landing/HeroAtmosphere";
 import { HeroHeadline } from "@/components/landing/HeroHeadline";
+import { PersonalizedRecommendations } from "@/components/landing/PersonalizedRecommendations";
 import { ArtisanShowcaseReel } from "@/components/landing/ArtisanShowcaseReel";
 import { CuratedCollections } from "@/components/landing/CuratedCollections";
 import { CuratorPromptTeaser } from "@/components/landing/CuratorPromptTeaser";
@@ -24,7 +25,10 @@ export default function HomePage() {
           <HeroHeadline />
         </section>
 
-        {/* 4. Infinite Kinetic Artisan Showcase Reel */}
+        {/* 4. AI Personalized Recommendations for Patrons */}
+        <PersonalizedRecommendations />
+
+        {/* 5. Infinite Kinetic Artisan Showcase Reel */}
         <ArtisanShowcaseReel />
 
         {/* 5. Curated Workshop Collections (Spotlight Bento Grid with 3D Tilt) */}

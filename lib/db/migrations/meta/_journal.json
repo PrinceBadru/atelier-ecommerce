@@ -8,6 +8,13 @@
       "when": 1792934548321,
       "tag": "0000_simple_gateway",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793029253459,
+      "tag": "0001_fat_vin_gonzales",
+      "breakpoints": true
     }
   ]
 }

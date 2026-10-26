@@ -24,6 +24,27 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+// User Taste & AI Preference Profiles
+export const userProfiles = pgTable("user_profiles", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" })
+    .unique(),
+  preferredCategories: text("preferred_categories")
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
+  styleAffinities: text("style_affinities")
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
+  tasteNotes: text("taste_notes"),
+  preferenceEmbedding: vector("preference_embedding", { dimensions: 768 }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 // Better Auth tables support
 export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(),
@@ -299,8 +320,27 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   }),
 }));
 
+export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
+  user: one(users, {
+    fields: [userProfiles.userId],
+    references: [users.id],
+  }),
+}));
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  profile: one(userProfiles, {
+    fields: [users.id],
+    references: [userProfiles.userId],
+  }),
+  orders: many(orders),
+  reviews: many(reviews),
+  sessions: many(sessions),
+  accounts: many(accounts),
+}));
+
 // Export Types
 export type User = typeof users.$inferSelect;
+export type UserProfile = typeof userProfiles.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type ProductVariant = typeof productVariants.$inferSelect;
 export type ProductImage = typeof productImages.$inferSelect;

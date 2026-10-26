@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import { SignOutButton } from "@/components/shop/SignOutButton";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { TasteProfileEditor } from "@/components/account/TasteProfileEditor";
 import {
   User,
   Package,
@@ -125,6 +126,9 @@ export default async function AccountPage() {
             </div>
           </div>
         </div>
+
+        {/* AI Semantic Taste Profile Editor */}
+        <TasteProfileEditor />
 
         {/* Order History */}
         <div className="space-y-4">

@@ -10,7 +10,15 @@ async function runMigration() {
     process.env.DATABASE_URL || "postgresql://postgres:postgrespassword@localhost:5433/atelier";
   console.log("Connecting to PostgreSQL at:", connectionString.replace(/:[^:@]+@/, ":***@"));
 
-  const sql = postgres(connectionString, { max: 1 });
+  const isLocal =
+    connectionString.includes("localhost") ||
+    connectionString.includes("127.0.0.1") ||
+    connectionString.includes("atelier-postgres");
+
+  const sql = postgres(connectionString, {
+    max: 1,
+    ssl: isLocal ? false : "require",
+  });
   const db = drizzle(sql);
 
   console.log("Applying migrations from ./lib/db/migrations...");
