@@ -12,7 +12,7 @@ services:
     runtime: node
     plan: free
     branch: main
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm run build
+    buildCommand: npm install -g pnpm@9 && pnpm install --frozen-lockfile && pnpm run build
     startCommand: pnpm run start
     envVars:
       - key: NODE_ENV
