@@ -1,4 +1,4 @@
-import { chromium } from "playwright";
+import { chromium } from "@playwright/test";
 
 async function run() {
   const browser = await chromium.launch({ channel: "msedge", headless: true });
