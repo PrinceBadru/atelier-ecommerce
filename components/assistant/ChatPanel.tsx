@@ -68,6 +68,23 @@ export function ChatPanel() {
     }
   }, [messages, isOpen]);
 
+  // Listen for prompt triggers from landing page prompt pills
+  React.useEffect(() => {
+    const handleTriggerPrompt = (e: Event) => {
+      const customEvent = e as CustomEvent<{ prompt: string }>;
+      if (customEvent.detail?.prompt) {
+        setIsOpen(true);
+        setTimeout(() => {
+          handleSend(customEvent.detail.prompt);
+        }, 350);
+      }
+    };
+
+    window.addEventListener("atelier:open-assistant-prompt", handleTriggerPrompt);
+    return () =>
+      window.removeEventListener("atelier:open-assistant-prompt", handleTriggerPrompt);
+  }, [messages, isThinking]);
+
   const handleAddToCart = async (product: ProductCardData) => {
     try {
       setAddedIds((prev) => ({ ...prev, [product.id]: true }));
