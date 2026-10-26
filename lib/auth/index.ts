@@ -18,6 +18,32 @@ function getBaseUrl(): string {
   return raw;
 }
 
+function credentials(prefix: string) {
+  const clientId = process.env[`${prefix}_CLIENT_ID`];
+  const clientSecret = process.env[`${prefix}_CLIENT_SECRET`];
+  if (!clientId || !clientSecret) return undefined;
+  if (
+    clientId.includes("unconfigured") ||
+    clientId.includes("placeholder") ||
+    clientId === "atelier-google-client-id" ||
+    clientId === "atelier-github-client-id"
+  ) {
+    return undefined;
+  }
+  return { clientId, clientSecret };
+}
+
+const providerSettings = {
+  google: credentials("GOOGLE"),
+  github: credentials("GITHUB"),
+  apple: credentials("APPLE"),
+  microsoft: credentials("MICROSOFT"),
+};
+
+const socialProviders = Object.fromEntries(
+  Object.entries(providerSettings).filter(([, creds]) => Boolean(creds))
+) as Record<string, { clientId: string; clientSecret: string }>;
+
 export const auth = betterAuth({
   appName: "Atelier",
   database: drizzleAdapter(db, {
@@ -36,62 +62,7 @@ export const auth = betterAuth({
     autoSignIn: true,
     requireEmailVerification: authConfig.requireEmailVerification,
   },
-  socialProviders: {
-    google: {
-      clientId:
-        process.env.GOOGLE_CLIENT_ID &&
-        process.env.GOOGLE_CLIENT_ID !== "atelier-google-client-id"
-          ? process.env.GOOGLE_CLIENT_ID
-          : "unconfigured-google-client-id",
-      clientSecret:
-        process.env.GOOGLE_CLIENT_SECRET &&
-        process.env.GOOGLE_CLIENT_SECRET !== "atelier-google-client-secret"
-          ? process.env.GOOGLE_CLIENT_SECRET
-          : "unconfigured-google-client-secret",
-      enabled: Boolean(
-        process.env.GOOGLE_CLIENT_ID &&
-        process.env.GOOGLE_CLIENT_SECRET &&
-        process.env.GOOGLE_CLIENT_ID !== "atelier-google-client-id" &&
-        !process.env.GOOGLE_CLIENT_ID.includes("placeholder")
-      ),
-    },
-    github: {
-      clientId:
-        process.env.GITHUB_CLIENT_ID &&
-        process.env.GITHUB_CLIENT_ID !== "atelier-github-client-id"
-          ? process.env.GITHUB_CLIENT_ID
-          : "unconfigured-github-client-id",
-      clientSecret:
-        process.env.GITHUB_CLIENT_SECRET &&
-        process.env.GITHUB_CLIENT_SECRET !== "atelier-github-client-secret"
-          ? process.env.GITHUB_CLIENT_SECRET
-          : "unconfigured-github-client-secret",
-      enabled: Boolean(
-        process.env.GITHUB_CLIENT_ID &&
-        process.env.GITHUB_CLIENT_SECRET &&
-        process.env.GITHUB_CLIENT_ID !== "atelier-github-client-id" &&
-        !process.env.GITHUB_CLIENT_ID.includes("placeholder")
-      ),
-    },
-    apple: {
-      clientId: process.env.APPLE_CLIENT_ID || "unconfigured-apple-client-id",
-      clientSecret: process.env.APPLE_CLIENT_SECRET || "unconfigured-apple-client-secret",
-      enabled: Boolean(
-        process.env.APPLE_CLIENT_ID &&
-        process.env.APPLE_CLIENT_SECRET &&
-        process.env.APPLE_CLIENT_ID !== "unconfigured-apple-client-id"
-      ),
-    },
-    microsoft: {
-      clientId: process.env.MICROSOFT_CLIENT_ID || "unconfigured-microsoft-client-id",
-      clientSecret: process.env.MICROSOFT_CLIENT_SECRET || "unconfigured-microsoft-client-secret",
-      enabled: Boolean(
-        process.env.MICROSOFT_CLIENT_ID &&
-        process.env.MICROSOFT_CLIENT_SECRET &&
-        process.env.MICROSOFT_CLIENT_ID !== "unconfigured-microsoft-client-id"
-      ),
-    },
-  },
+  socialProviders,
   plugins: [
     admin({
       defaultRole: "shopper",

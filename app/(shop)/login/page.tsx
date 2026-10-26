@@ -242,31 +242,16 @@ function CustomerLoginForm() {
     }
   };
 
-  // 5. Social Providers
+  // 5. Social Providers (Flare Framework: authentic OAuth redirect)
   const handleSocialSignIn = async (provider: "google" | "github" | "microsoft" | "apple") => {
     setErrorMessage("");
     setIsSocialLoading(provider);
 
     try {
-      if (providerConfig?.[provider]) {
-        await authClient.signIn.social({
-          provider,
-          callbackURL: callbackUrl,
-        });
-        return;
-      }
-
-      // Direct instant authentication for social provider (No setup notice, immediate sign-in)
-      const res = await fetch("/api/auth/demo-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider }),
+      await authClient.signIn.social({
+        provider,
+        callbackURL: callbackUrl,
       });
-
-      if (!res.ok) throw new Error(`Could not authenticate with ${provider}`);
-
-      router.push(callbackUrl);
-      router.refresh();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : `Failed to authenticate with ${provider}.`;
       setErrorMessage(msg);
@@ -274,28 +259,9 @@ function CustomerLoginForm() {
     }
   };
 
-  // 6. Demo Session Bypass
-  const handleDemoSignIn = async (role: "shopper" | "admin" = "shopper") => {
-    setErrorMessage("");
-    setIsLoading(true);
-
-    try {
-      const res = await fetch("/api/auth/demo-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role }),
-      });
-
-      if (!res.ok) throw new Error("Could not initialize demo session");
-
-      router.push(role === "admin" ? "/admin" : callbackUrl);
-      router.refresh();
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Demo sign in failed.";
-      setErrorMessage(msg);
-      setIsLoading(false);
-    }
-  };
+  const configuredProviders = (["google", "github", "microsoft", "apple"] as const).filter(
+    (p) => providerConfig?.[p] === true
+  );
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -330,77 +296,53 @@ function CustomerLoginForm() {
       )}
 
       <div className="rounded-xl border border-border bg-surface p-6 shadow-elevation2 space-y-5">
-        {/* Social Logins */}
-        <div className="grid grid-cols-4 gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleSocialSignIn("google")}
-            disabled={isLoading || isSocialLoading !== null}
-            className="text-xs p-2 h-9 hover:border-accent/40"
-            title="Sign in with Google"
-          >
-            {isSocialLoading === "google" ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <GoogleIcon className="w-4 h-4" />
-            )}
-          </Button>
+        {/* Social Logins: switches on only when credentials are set in environment */}
+        {configuredProviders.length > 0 && (
+          <>
+            <div
+              className={`grid gap-2 ${
+                configuredProviders.length === 1
+                  ? "grid-cols-1"
+                  : configuredProviders.length === 2
+                  ? "grid-cols-2"
+                  : "grid-cols-4"
+              }`}
+            >
+              {configuredProviders.map((p) => (
+                <Button
+                  key={p}
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleSocialSignIn(p)}
+                  disabled={isLoading || isSocialLoading !== null}
+                  className="text-xs p-2 h-9 hover:border-accent/40 capitalize gap-2"
+                  title={`Sign in with ${p}`}
+                >
+                  {isSocialLoading === p ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <>
+                      {p === "google" && <GoogleIcon className="w-4 h-4" />}
+                      {p === "github" && <GithubIcon className="w-4 h-4" />}
+                      {p === "microsoft" && <MicrosoftIcon className="w-4 h-4" />}
+                      {p === "apple" && <AppleIcon className="w-4 h-4" />}
+                      {configuredProviders.length <= 2 && <span>{p}</span>}
+                    </>
+                  )}
+                </Button>
+              ))}
+            </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleSocialSignIn("github")}
-            disabled={isLoading || isSocialLoading !== null}
-            className="text-xs p-2 h-9 hover:border-accent/40"
-            title="Sign in with GitHub"
-          >
-            {isSocialLoading === "github" ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <GithubIcon className="w-4 h-4" />
-            )}
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleSocialSignIn("microsoft")}
-            disabled={isLoading || isSocialLoading !== null}
-            className="text-xs p-2 h-9 hover:border-accent/40"
-            title="Sign in with Microsoft"
-          >
-            {isSocialLoading === "microsoft" ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <MicrosoftIcon className="w-4 h-4" />
-            )}
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleSocialSignIn("apple")}
-            disabled={isLoading || isSocialLoading !== null}
-            className="text-xs p-2 h-9 hover:border-accent/40"
-            title="Sign in with Apple"
-          >
-            {isSocialLoading === "apple" ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <AppleIcon className="w-4 h-4" />
-            )}
-          </Button>
-        </div>
-
-        {/* Divider */}
-        <div className="relative flex items-center justify-center">
-          <div className="border-t border-border w-full" />
-          <span className="bg-surface px-3 text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-            or choose method
-          </span>
-          <div className="border-t border-border w-full" />
-        </div>
+            {/* Divider */}
+            <div className="relative flex items-center justify-center">
+              <div className="border-t border-border w-full" />
+              <span className="bg-surface px-3 text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+                or choose method
+              </span>
+              <div className="border-t border-border w-full" />
+            </div>
+          </>
+        )}
 
         {/* Flare Framework Auth Mode Tabs */}
         <div className="grid grid-cols-4 p-1 bg-muted/40 rounded-lg text-xs gap-0.5">
@@ -702,33 +644,7 @@ function CustomerLoginForm() {
           </div>
         )}
 
-        {/* One-Click Demo Evaluator Shortcut */}
-        <div className="pt-3 border-t border-border grid grid-cols-2 gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => handleDemoSignIn("shopper")}
-            disabled={isLoading}
-            className="w-full text-[11px] text-muted-foreground hover:text-foreground border-dashed gap-1"
-          >
-            <Sparkles className="w-3 h-3 text-accent" />
-            <span>Shopper Demo</span>
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => handleDemoSignIn("admin")}
-            disabled={isLoading}
-            className="w-full text-[11px] text-muted-foreground hover:text-foreground border-dashed gap-1"
-          >
-            <Sparkles className="w-3 h-3 text-amber-500" />
-            <span>Studio Admin</span>
-          </Button>
-        </div>
-
-        <div className="text-center text-xs text-muted-foreground">
+        <div className="text-center text-xs text-muted-foreground pt-1">
           Don&apos;t have an account?{" "}
           <Link
             href={`/register${callbackUrl !== "/account" ? `?callbackUrl=${callbackUrl}` : ""}`}
