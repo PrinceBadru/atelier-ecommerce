@@ -10,6 +10,7 @@ services:
     name: atelier-web
     runtime: node
     plan: free
+    branch: main
     buildCommand: npm ci --legacy-peer-deps && npm run build
     startCommand: npm run start
     envVars:
