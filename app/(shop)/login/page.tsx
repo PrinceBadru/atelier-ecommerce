@@ -132,7 +132,7 @@ function CustomerLoginForm() {
 
   const handleSocialSignIn = async (provider: "google" | "github") => {
     setErrorMessage("");
-    if (providerConfig && !providerConfig[provider]) {
+    if (!providerConfig?.[provider]) {
       setOauthNotice({ provider: provider === "google" ? "Google" : "GitHub" });
       return;
     }

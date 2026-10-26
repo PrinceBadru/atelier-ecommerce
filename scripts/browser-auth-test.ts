@@ -53,8 +53,18 @@ async function run() {
   const magicSent = await page.locator('text=Magic Link Dispatched').count();
   console.log("Magic link success banner shown:", magicSent > 0);
 
-  // 5. Test Admin Login
-  console.log("\n[TEST 5] Testing Admin Studio Portal Demo Login...");
+  // 5. Test Social Login Graceful Notice (Google Button Click)
+  console.log("\n[TEST 5] Testing Google Social Login graceful notice handling...");
+  await page.goto("https://atelier-web-5swv.onrender.com/login", { waitUntil: "networkidle" });
+  const googleBtn = page.locator('button:has-text("Google")');
+  console.log("Google button found:", (await googleBtn.count()) > 0);
+  await googleBtn.click();
+  await page.waitForTimeout(1000);
+  const noticeShown = await page.locator('text=Google OAuth Setup Notice').count();
+  console.log("Graceful OAuth setup notice displayed (no 401 white crash screen):", noticeShown > 0);
+
+  // 6. Test Admin Login
+  console.log("\n[TEST 6] Testing Admin Studio Portal Demo Login...");
   await page.goto("https://atelier-web-5swv.onrender.com/admin/login", { waitUntil: "networkidle" });
   const adminDemoBtn = page.locator('button:has-text("Instant Preview")');
   console.log("Demo Admin button found:", (await adminDemoBtn.count()) > 0);

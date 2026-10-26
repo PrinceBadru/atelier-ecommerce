@@ -105,7 +105,7 @@ function CustomerRegisterForm() {
 
   const handleSocialSignIn = async (provider: "google" | "github") => {
     setErrorMessage("");
-    if (providerConfig && !providerConfig[provider]) {
+    if (!providerConfig?.[provider]) {
       setOauthNotice({ provider: provider === "google" ? "Google" : "GitHub" });
       return;
     }
@@ -120,6 +120,28 @@ function CustomerRegisterForm() {
       const msg = err instanceof Error ? err.message : `Failed to authenticate with ${provider}.`;
       setErrorMessage(msg);
       setIsSocialLoading(null);
+    }
+  };
+
+  const handleDemoShopperSignIn = async () => {
+    setErrorMessage("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/demo-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: "shopper" }),
+      });
+
+      if (!res.ok) throw new Error("Could not initialize demo session");
+
+      router.push(callbackUrl);
+      router.refresh();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Demo sign in failed.";
+      setErrorMessage(msg);
+      setIsLoading(false);
     }
   };
 
@@ -166,8 +188,19 @@ function CustomerRegisterForm() {
             https://atelier-web-5swv.onrender.com/api/auth/callback/{oauthNotice.provider.toLowerCase()}
           </div>
           <p className="text-muted-foreground text-[11px]">
-            To register manually in 5 seconds, simply use the form below with your email and password.
+            To access your store immediately without cloud API setup, click below:
           </p>
+          <Button
+            type="button"
+            size="sm"
+            variant="default"
+            onClick={handleDemoShopperSignIn}
+            disabled={isLoading}
+            className="w-full text-xs gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <span>Enter Immediately as Shopper (1-Click)</span>
+          </Button>
         </div>
       )}
 
