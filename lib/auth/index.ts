@@ -62,6 +62,18 @@ export const auth = betterAuth({
     process.env.BETTER_AUTH_SECRET ||
     "atelier_demo_better_auth_secret_minimum_32_characters_long",
   baseURL: getBaseUrl(),
+  trustedOrigins: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://atelier-web-5swv.onrender.com",
+    process.env.BETTER_AUTH_URL || "",
+    process.env.NEXT_PUBLIC_APP_URL || "",
+  ].filter(Boolean),
+  advanced: {
+    database: {
+      generateId: "uuid",
+    },
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;
