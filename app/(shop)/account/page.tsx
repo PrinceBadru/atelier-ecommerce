@@ -11,6 +11,7 @@ import { formatPrice } from "@/lib/utils";
 import { SignOutButton } from "@/components/shop/SignOutButton";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TasteProfileEditor } from "@/components/account/TasteProfileEditor";
+import { SecuritySettings } from "@/components/account/SecuritySettings";
 import {
   User,
   Package,
@@ -35,6 +36,7 @@ export default async function AccountPage() {
   }
 
   const userRole = (session.user as { role?: string }).role || "shopper";
+  const twoFactorEnabled = Boolean((session.user as { twoFactorEnabled?: boolean }).twoFactorEnabled);
 
   // Fetch orders associated with this user, or recent storefront orders if fresh
   let userOrders = await db.query.orders.findMany({
@@ -129,6 +131,9 @@ export default async function AccountPage() {
 
         {/* AI Semantic Taste Profile Editor */}
         <TasteProfileEditor />
+
+        {/* Flare Framework Security & WebAuthn / Passkeys / 2FA */}
+        <SecuritySettings initialTwoFactorEnabled={twoFactorEnabled} />
 
         {/* Order History */}
         <div className="space-y-4">

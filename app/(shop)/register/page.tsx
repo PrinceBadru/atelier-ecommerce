@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth/client";
+import { checkPassword, isBreachedPassword } from "@/lib/auth/password-rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,6 +18,9 @@ import {
   Eye,
   EyeOff,
   Sparkles,
+  Check,
+  X,
+  ShieldAlert,
 } from "lucide-react";
 
 function GoogleIcon({ className }: { className?: string }) {
@@ -54,6 +58,25 @@ function GithubIcon({ className }: { className?: string }) {
   );
 }
 
+function MicrosoftIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 23 23">
+      <path fill="#f35325" d="M1 1h10v10H1z" />
+      <path fill="#81bc06" d="M12 1h10v10H12z" />
+      <path fill="#05a6f0" d="M1 12h10v10H1z" />
+      <path fill="#ffba08" d="M12 12h10v10H12z" />
+    </svg>
+  );
+}
+
+function AppleIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 170 170">
+      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.92-3.37-7.83-8.08-11.73-14.13-6.52-10.22-11.39-21.73-14.61-34.53-3.21-12.8-4.82-24.63-4.82-35.49 0-14.99 3.59-27.52 10.77-37.58 7.18-10.06 16.5-15.19 27.97-15.39 4.36 0 9.4 1.14 15.12 3.42 5.72 2.28 9.5 3.47 11.34 3.58 2.39-.22 6.36-1.46 11.91-3.73 5.55-2.27 10.22-3.32 14.02-3.15 11.08.76 20.15 4.67 27.22 11.73 7.07 7.06 11.4 15.7 12.98 25.91-9.78 5.87-14.56 14.23-14.34 25.09.22 9.57 3.97 17.5 11.25 23.8 7.28 6.3 15.98 9.94 26.09 10.92-2.17 6.3-4.67 12.49-7.5 18.57zM119.22 31.84c0-7.17 2.55-13.9 7.66-20.18 5.1-6.28 11.38-10.38 18.84-12.3 1.09 6.74-.27 13.6-4.08 20.58-3.8 6.98-9.24 11.3-16.32 12.96-.87-.33-2.23-.53-4.08-.6-1.3-.11-1.98-.26-2.02-.46z" />
+    </svg>
+  );
+}
+
 function CustomerRegisterForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -66,7 +89,12 @@ function CustomerRegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSocialLoading, setIsSocialLoading] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [providerConfig, setProviderConfig] = useState<{ google: boolean; github: boolean } | null>(null);
+  const [providerConfig, setProviderConfig] = useState<{
+    google?: boolean;
+    github?: boolean;
+    apple?: boolean;
+    microsoft?: boolean;
+  } | null>(null);
   const [oauthNotice, setOauthNotice] = useState<{ provider: string } | null>(null);
 
   useEffect(() => {
@@ -76,12 +104,32 @@ function CustomerRegisterForm() {
       .catch(() => {});
   }, []);
 
+  const passwordCheck = useMemo(() => {
+    return checkPassword(password, [name, email]);
+  }, [password, name, email]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+
+    if (!passwordCheck.valid) {
+      setErrorMessage(passwordCheck.advice || "Please choose a stronger password.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
+      // Check breach database asynchronously
+      const breached = await isBreachedPassword(password);
+      if (breached) {
+        setErrorMessage(
+          "That password has appeared in a public breach list and is unsafe. Please choose a different password."
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const res = await authClient.signUp.email({
         email,
         password,
@@ -103,10 +151,16 @@ function CustomerRegisterForm() {
     }
   };
 
-  const handleSocialSignIn = async (provider: "google" | "github") => {
+  const handleSocialSignIn = async (provider: "google" | "github" | "microsoft" | "apple") => {
     setErrorMessage("");
     if (!providerConfig?.[provider]) {
-      setOauthNotice({ provider: provider === "google" ? "Google" : "GitHub" });
+      const names: Record<string, string> = {
+        google: "Google",
+        github: "GitHub",
+        microsoft: "Microsoft",
+        apple: "Apple",
+      };
+      setOauthNotice({ provider: names[provider] || provider });
       return;
     }
     setIsSocialLoading(provider);
@@ -145,6 +199,14 @@ function CustomerRegisterForm() {
     }
   };
 
+  const scoreColors = [
+    "bg-destructive/60",
+    "bg-destructive",
+    "bg-amber-500",
+    "bg-blue-500",
+    "bg-emerald-500",
+  ];
+
   return (
     <div className="w-full max-w-md space-y-6">
       <div className="text-center space-y-2">
@@ -155,7 +217,7 @@ function CustomerRegisterForm() {
           Create an Account
         </h1>
         <p className="text-xs text-muted-foreground">
-          Join the Atelier community for order tracking, expedited checkout, and curated artisan drops.
+          Join the Atelier community for curated taste recommendations and artisan collections.
         </p>
       </div>
 
@@ -182,13 +244,13 @@ function CustomerRegisterForm() {
             </button>
           </div>
           <p className="text-muted-foreground leading-relaxed text-[11px]">
-            Live {oauthNotice.provider} sign-in requires registering an OAuth Client ID in your {oauthNotice.provider} Developer Console:
+            Live {oauthNotice.provider} registration requires registering an OAuth Client ID in your developer dashboard:
           </p>
           <div className="rounded bg-background/80 p-2 font-mono text-[10px] border border-border select-all break-all text-foreground">
             https://atelier-web-5swv.onrender.com/api/auth/callback/{oauthNotice.provider.toLowerCase()}
           </div>
           <p className="text-muted-foreground text-[11px]">
-            To access your store immediately without cloud API setup, click below:
+            To preview immediately without external keys, click below:
           </p>
           <Button
             type="button"
@@ -206,20 +268,20 @@ function CustomerRegisterForm() {
 
       <div className="rounded-xl border border-border bg-surface p-6 shadow-elevation2 space-y-5">
         {/* Social Logins */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-4 gap-2">
           <Button
             type="button"
             variant="outline"
             onClick={() => handleSocialSignIn("google")}
             disabled={isLoading || isSocialLoading !== null}
-            className="w-full text-xs gap-2 font-normal hover:border-accent/40"
+            className="text-xs p-2 h-9 hover:border-accent/40"
+            title="Register with Google"
           >
             {isSocialLoading === "google" ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
               <GoogleIcon className="w-4 h-4" />
             )}
-            <span>Google</span>
           </Button>
 
           <Button
@@ -227,14 +289,44 @@ function CustomerRegisterForm() {
             variant="outline"
             onClick={() => handleSocialSignIn("github")}
             disabled={isLoading || isSocialLoading !== null}
-            className="w-full text-xs gap-2 font-normal hover:border-accent/40"
+            className="text-xs p-2 h-9 hover:border-accent/40"
+            title="Register with GitHub"
           >
             {isSocialLoading === "github" ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
               <GithubIcon className="w-4 h-4" />
             )}
-            <span>GitHub</span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => handleSocialSignIn("microsoft")}
+            disabled={isLoading || isSocialLoading !== null}
+            className="text-xs p-2 h-9 hover:border-accent/40"
+            title="Register with Microsoft"
+          >
+            {isSocialLoading === "microsoft" ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <MicrosoftIcon className="w-4 h-4" />
+            )}
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => handleSocialSignIn("apple")}
+            disabled={isLoading || isSocialLoading !== null}
+            className="text-xs p-2 h-9 hover:border-accent/40"
+            title="Register with Apple"
+          >
+            {isSocialLoading === "apple" ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <AppleIcon className="w-4 h-4" />
+            )}
           </Button>
         </div>
 
@@ -287,8 +379,13 @@ function CustomerRegisterForm() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground" htmlFor="register-password">
-              Password (min. 8 characters)
+            <label className="text-xs font-medium text-foreground flex items-center justify-between" htmlFor="register-password">
+              <span>Password</span>
+              {password && (
+                <span className="text-[11px] font-semibold text-muted-foreground">
+                  {passwordCheck.label}
+                </span>
+              )}
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -296,7 +393,6 @@ function CustomerRegisterForm() {
                 id="register-password"
                 type={showPassword ? "text" : "password"}
                 required
-                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
@@ -311,9 +407,56 @@ function CustomerRegisterForm() {
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+
+            {/* Flare Framework Password Strength Meter */}
+            {password.length > 0 && (
+              <div className="space-y-2 pt-1 animate-in fade-in duration-150">
+                <div className="grid grid-cols-4 gap-1 h-1">
+                  {[1, 2, 3, 4].map((step) => (
+                    <div
+                      key={step}
+                      className={`h-full rounded-full transition-all duration-300 ${
+                        passwordCheck.score >= step
+                          ? scoreColors[passwordCheck.score]
+                          : "bg-muted"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <div className="space-y-1 text-[11px] text-muted-foreground pt-1">
+                  {passwordCheck.rules.map((rule) => (
+                    <div
+                      key={rule.id}
+                      className={`flex items-center gap-1.5 transition-colors ${
+                        rule.met ? "text-emerald-500 font-medium" : "text-muted-foreground"
+                      }`}
+                    >
+                      {rule.met ? (
+                        <Check className="w-3 h-3 flex-shrink-0" />
+                      ) : (
+                        <span className="w-3 h-3 flex items-center justify-center text-[10px]">•</span>
+                      )}
+                      <span>{rule.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {passwordCheck.advice && (
+                  <p className="text-[11px] text-amber-500 flex items-center gap-1 pt-0.5">
+                    <ShieldAlert className="w-3 h-3 flex-shrink-0" />
+                    <span>{passwordCheck.advice}</span>
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
-          <Button type="submit" className="w-full text-xs font-medium mt-1" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full text-xs font-medium mt-1"
+            disabled={isLoading || !passwordCheck.valid}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> Creating Account...
@@ -328,7 +471,10 @@ function CustomerRegisterForm() {
 
         <div className="pt-2 text-center text-xs text-muted-foreground border-t border-border">
           Already have an account?{" "}
-          <Link href={`/login${callbackUrl !== "/account" ? `?callbackUrl=${callbackUrl}` : ""}`} className="text-accent font-medium hover:underline">
+          <Link
+            href={`/login${callbackUrl !== "/account" ? `?callbackUrl=${callbackUrl}` : ""}`}
+            className="text-accent font-medium hover:underline"
+          >
             Sign In
           </Link>
         </div>

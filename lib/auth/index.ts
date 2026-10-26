@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { magicLink } from "better-auth/plugins";
+import { admin, magicLink, emailOTP, twoFactor } from "better-auth/plugins";
+import { passkey } from "@better-auth/passkey";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { authConfig } from "./config";
 
 function getBaseUrl(): string {
   let raw =
@@ -17,6 +19,7 @@ function getBaseUrl(): string {
 }
 
 export const auth = betterAuth({
+  appName: "Atelier",
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -24,11 +27,14 @@ export const auth = betterAuth({
       session: schema.sessions,
       account: schema.accounts,
       verification: schema.verifications,
+      passkey: schema.passkeys,
+      twoFactor: schema.twoFactors,
     },
   }),
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
+    requireEmailVerification: authConfig.requireEmailVerification,
   },
   socialProviders: {
     google: {
@@ -67,13 +73,58 @@ export const auth = betterAuth({
         !process.env.GITHUB_CLIENT_ID.includes("placeholder")
       ),
     },
+    apple: {
+      clientId: process.env.APPLE_CLIENT_ID || "unconfigured-apple-client-id",
+      clientSecret: process.env.APPLE_CLIENT_SECRET || "unconfigured-apple-client-secret",
+      enabled: Boolean(
+        process.env.APPLE_CLIENT_ID &&
+        process.env.APPLE_CLIENT_SECRET &&
+        process.env.APPLE_CLIENT_ID !== "unconfigured-apple-client-id"
+      ),
+    },
+    microsoft: {
+      clientId: process.env.MICROSOFT_CLIENT_ID || "unconfigured-microsoft-client-id",
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET || "unconfigured-microsoft-client-secret",
+      enabled: Boolean(
+        process.env.MICROSOFT_CLIENT_ID &&
+        process.env.MICROSOFT_CLIENT_SECRET &&
+        process.env.MICROSOFT_CLIENT_ID !== "unconfigured-microsoft-client-id"
+      ),
+    },
   },
   plugins: [
+    admin({
+      defaultRole: "shopper",
+      adminRoles: ["admin"],
+    }),
     magicLink({
       sendMagicLink: async ({ email, token, url }) => {
-        // Output magic link to server logs for development and test workflows
+        // Output magic link to server logs for verification & test automation
         console.log(`[Better-Auth Magic Link] Destination: ${email} -> ${url}`);
       },
+      expiresIn: 5 * 60,
+    }),
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        // Output OTP to server logs for development, verification, and tests
+        console.log(`[Better-Auth Email OTP] (${type}) for ${email}: ${otp}`);
+      },
+      otpLength: 6,
+      expiresIn: 5 * 60,
+      allowedAttempts: 5,
+    }),
+    twoFactor({
+      issuer: "Atelier",
+      otpOptions: {
+        async sendOTP({ user, otp }) {
+          console.log(`[Better-Auth 2FA OTP] for ${user.email}: ${otp}`);
+        },
+        allowedAttempts: 5,
+      },
+      allowPasswordless: true,
+    }),
+    passkey({
+      rpName: "Atelier",
     }),
   ],
   user: {
