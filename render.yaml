@@ -26,7 +26,7 @@ services:
       - key: BETTER_AUTH_SECRET
         generateValue: true
       - key: AI_MODEL_MAIN
-        value: gemini-2.5-flash
+        value: gemini-3-flash-preview
       - key: GOOGLE_GENERATIVE_AI_API_KEY
         sync: false
       - key: STRIPE_SECRET_KEY
