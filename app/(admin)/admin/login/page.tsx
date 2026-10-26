@@ -15,6 +15,8 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
+  Eye,
+  EyeOff,
   Sparkles,
 } from "lucide-react";
 
@@ -26,6 +28,7 @@ function AdminLoginForm() {
 
   const [email, setEmail] = useState("admin@atelier.dev");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
     errorParam === "admin_required"
@@ -56,6 +59,28 @@ function AdminLoginForm() {
       router.refresh();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Authentication failed.";
+      setErrorMessage(msg);
+      setIsLoading(false);
+    }
+  };
+
+  const handleDemoAdminSignIn = async () => {
+    setErrorMessage("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/demo-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: "admin" }),
+      });
+
+      if (!res.ok) throw new Error("Could not initialize admin demo session");
+
+      router.push(callbackUrl);
+      router.refresh();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Demo admin sign in failed.";
       setErrorMessage(msg);
       setIsLoading(false);
     }
@@ -112,14 +137,21 @@ function AdminLoginForm() {
             <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               id="admin-password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="pl-9 text-xs"
+              className="pl-9 pr-9 text-xs"
               disabled={isLoading}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
           </div>
         </div>
 
@@ -134,6 +166,21 @@ function AdminLoginForm() {
             </>
           )}
         </Button>
+
+        {/* One-Click Evaluator Shortcut for Admin */}
+        <div className="pt-3 border-t border-border">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleDemoAdminSignIn}
+            disabled={isLoading}
+            className="w-full text-[11px] text-accent hover:text-accent-foreground hover:bg-accent/15 border-dashed border-accent/40 gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <span>One-Click Instant Preview (Admin Staff Session)</span>
+          </Button>
+        </div>
       </form>
 
       <div className="text-center">

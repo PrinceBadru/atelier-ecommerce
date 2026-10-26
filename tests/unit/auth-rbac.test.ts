@@ -10,6 +10,8 @@ describe("Auth Client & RBAC Security Verification", () => {
     expect(authClient.signUp).toBeDefined();
     expect(authClient.signOut).toBeDefined();
     expect(typeof authClient.signIn.email).toBe("function");
+    expect(typeof authClient.signIn.social).toBe("function");
+    expect(typeof authClient.signIn.magicLink).toBe("function");
     expect(typeof authClient.signUp.email).toBe("function");
     expect(typeof authClient.signOut).toBe("function");
   });

@@ -4,6 +4,7 @@ import { products, categories, productImages, productVariants } from "@/lib/db/s
 import { eq, and, sql, asc, desc, inArray } from "drizzle-orm";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { FilterBar } from "@/components/shop/FilterBar";
+import { StorefrontHeader } from "@/components/shop/StorefrontHeader";
 import { searchProducts } from "@/lib/ai/search";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -157,25 +158,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header Bar */}
-      <header className="sticky top-0 z-40 bg-surface/85 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="font-display text-scale-24 font-normal tracking-tight">
-            Atelier
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link href="/account">
-              <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
-                <User className="w-3.5 h-3.5 mr-1.5" /> Account
-              </Button>
-            </Link>
-            <Link href="/cart">
-              <Button variant="outline" size="sm" className="text-xs">
-                <ShoppingBag className="w-3.5 h-3.5 mr-1.5" /> Cart
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <StorefrontHeader />
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">

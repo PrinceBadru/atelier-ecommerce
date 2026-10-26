@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { authClient } from "@/lib/auth/client";
 import { LogOut, ExternalLink, ShieldCheck } from "lucide-react";
 
@@ -63,6 +64,7 @@ export function AdminHeader({ userEmail = "admin@atelier.dev" }: AdminHeaderProp
       </div>
 
       <div className="flex items-center gap-3">
+        <ThemeToggle />
         <Link href="/products" target="_blank" rel="noopener noreferrer">
           <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground gap-1.5">
             Storefront <ExternalLink className="w-3 h-3" />

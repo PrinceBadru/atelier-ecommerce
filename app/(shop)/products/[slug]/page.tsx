@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/utils";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { StorefrontHeader } from "@/components/shop/StorefrontHeader";
 import {
   ShoppingBag,
   Check,
@@ -135,40 +136,21 @@ export default async function ProductDetailPage({
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header Bar */}
-      <header className="sticky top-0 z-40 bg-surface/85 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/products"
-              className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-xs font-medium"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" /> Back to Catalog
-            </Link>
-            <span className="text-border">|</span>
-            <Link
-              href="/"
-              className="font-display text-scale-20 font-normal tracking-tight"
-            >
-              Atelier
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/account">
-              <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
-                <User className="w-3.5 h-3.5 mr-1.5" /> Account
-              </Button>
-            </Link>
-            <Link href="/cart">
-              <Button variant="outline" size="sm" className="text-xs">
-                <ShoppingBag className="w-3.5 h-3.5 mr-1.5" /> Cart
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <StorefrontHeader />
 
       {/* Main Detail View */}
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Link
+            href="/products"
+            className="hover:text-foreground flex items-center gap-1.5 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Catalog
+          </Link>
+          <span>/</span>
+          <span className="text-foreground font-medium">{product.category.name}</span>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column: Product Gallery */}
           <div className="space-y-4">

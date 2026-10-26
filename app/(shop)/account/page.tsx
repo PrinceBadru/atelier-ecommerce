@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import { SignOutButton } from "@/components/shop/SignOutButton";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import {
   User,
   Package,
@@ -72,6 +73,7 @@ export default async function AccountPage() {
           Atelier
         </Link>
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           {userRole === "admin" && (
             <Link href="/admin">
               <Button variant="outline" size="sm" className="text-xs border-accent/40 text-accent">

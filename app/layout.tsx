@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { ChatPanel } from "@/components/assistant/ChatPanel";
 
 const inter = Inter({
@@ -37,8 +38,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased selection:bg-accent/20 selection:text-foreground">
-        {children}
-        <ChatPanel />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          {children}
+          <ChatPanel />
+        </ThemeProvider>
       </body>
     </html>
   );
