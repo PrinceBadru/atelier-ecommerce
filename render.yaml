@@ -12,8 +12,8 @@ services:
     runtime: node
     plan: free
     branch: main
-    buildCommand: npm ci --legacy-peer-deps && npm run build
-    startCommand: npm run start
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm run start
     envVars:
       - key: NODE_ENV
         value: production
