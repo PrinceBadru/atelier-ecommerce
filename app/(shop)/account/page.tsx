@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import { User, Package, ShieldAlert, ArrowRight, ArrowLeft } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AccountPage() {
   const recentOrders = await db.query.orders.findMany({
     orderBy: [desc(orders.createdAt)],

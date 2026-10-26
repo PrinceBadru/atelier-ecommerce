@@ -21,6 +21,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
 }

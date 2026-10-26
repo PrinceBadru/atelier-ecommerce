@@ -16,6 +16,8 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboardPage() {
   // Aggregate Metrics
   const allOrders = await db.query.orders.findMany({

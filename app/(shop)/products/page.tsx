@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+
 interface ProductsPageProps {
   searchParams: Promise<{
     category?: string;
