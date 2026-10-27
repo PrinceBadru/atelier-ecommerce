@@ -12,16 +12,33 @@ async function verifyAuth() {
   console.log("  Target:", baseUrl);
   console.log("==================================================");
 
-  // 1. Visit Login Page
+  // 1. Visit Login Page & Verify Social Auth Methods
   console.log("\n[CHECK 1] Loading /login...");
   await page.goto(`${baseUrl}/login`, { waitUntil: "networkidle" });
   await page.screenshot({ path: "live-login-clean.png" });
 
-  const shopperDemoBtn = await page.locator('button:has-text("Shopper Demo")').count();
-  console.log("Mock 'Shopper Demo' button count (should be 0):", shopperDemoBtn);
-
   const googleBtn = await page.locator('button[title*="Google"]').count();
-  console.log("Unconfigured Google button count (should be 0 when no credentials in env):", googleBtn);
+  const githubBtn = await page.locator('button[title*="GitHub"]').count();
+  const microsoftBtn = await page.locator('button[title*="Microsoft"]').count();
+  const appleBtn = await page.locator('button[title*="Apple"]').count();
+  console.log("Social auth buttons present on login:", {
+    google: googleBtn > 0,
+    github: githubBtn > 0,
+    microsoft: microsoftBtn > 0,
+    apple: appleBtn > 0,
+  });
+
+  const shopperDemoBtn = await page.locator('button:has-text("Shopper Demo")').count();
+  console.log("Mock 'Shopper Demo' button count (must be 0):", shopperDemoBtn);
+
+  // Test clicking Google button to verify production behavior (NO mock user session)
+  console.log("Testing Google button click behavior...");
+  await page.locator('button[title*="Google"]').click();
+  await page.waitForTimeout(1000);
+  const currentUrl = page.url();
+  const pageText = await page.content();
+  console.log("Current URL after Google click (should NOT navigate to fake account):", currentUrl);
+  console.log("Contains 'Alex Vance' (MUST BE FALSE):", pageText.includes("Alex Vance"));
 
   const passwordTab = await page.locator('button:has-text("Password")').count();
   const emailCodeTab = await page.locator('button:has-text("Email Code")').count();
@@ -33,6 +50,9 @@ async function verifyAuth() {
   console.log("\n[CHECK 2] Registering authentic new user...");
   await page.goto(`${baseUrl}/register`, { waitUntil: "networkidle" });
   await page.screenshot({ path: "live-register-clean.png" });
+
+  const regGoogleBtn = await page.locator('button[title*="Google"]').count();
+  console.log("Social buttons present on /register:", regGoogleBtn > 0);
 
   const testName = "Genevieve Thorne";
   const testEmail = `genevieve.${Date.now()}@atelier.dev`;
