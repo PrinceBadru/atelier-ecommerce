@@ -33,16 +33,22 @@ function credentials(prefix: string) {
   return { clientId, clientSecret };
 }
 
-const providerSettings = {
+const providerSettings: Record<string, { clientId: string; clientSecret: string } | undefined> = {
   google: credentials("GOOGLE"),
   github: credentials("GITHUB"),
   apple: credentials("APPLE"),
   microsoft: credentials("MICROSOFT"),
 };
 
-const socialProviders = Object.fromEntries(
-  Object.entries(providerSettings).filter(([, creds]) => Boolean(creds))
+export const socialProviders = Object.fromEntries(
+  authConfig.social.flatMap((provider) =>
+    providerSettings[provider] ? [[provider, providerSettings[provider]!]] : []
+  )
 ) as Record<string, { clientId: string; clientSecret: string }>;
+
+export function enabledSocialProviders() {
+  return Object.keys(socialProviders);
+}
 
 export const auth = betterAuth({
   appName: "Atelier",
