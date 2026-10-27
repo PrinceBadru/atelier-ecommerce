@@ -221,26 +221,25 @@ function CustomerLoginForm() {
       )}
 
       <div className="rounded-xl border border-border bg-surface p-6 shadow-elevation2 space-y-5">
-        {/* Social Authentication Methods (Only rendered when configured in environment, Flare pattern) */}
-        {providers.length > 0 && (
-          <>
-            <SocialButtons
-              providers={providers}
-              variant="icon"
-              next={callbackUrl}
-              onError={(err) => setErrorMessage(err)}
-            />
+        {/* Social / OAuth Authentication Methods (Always accessible) */}
+        <div>
+          <SocialButtons
+            providers={providers.length > 0 ? providers : ["google", "github", "microsoft", "apple"]}
+            variant="icon"
+            next={callbackUrl}
+            currentEmail={email}
+            onError={(err) => setErrorMessage(err)}
+          />
 
-            {/* Divider */}
-            <div className="relative flex items-center justify-center">
-              <div className="border-t border-border w-full" />
-              <span className="bg-surface px-3 text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-                or choose method
-              </span>
-              <div className="border-t border-border w-full" />
-            </div>
-          </>
-        )}
+          {/* Divider */}
+          <div className="relative flex items-center justify-center my-4">
+            <div className="border-t border-border w-full" />
+            <span className="bg-surface px-3 text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+              or choose method
+            </span>
+            <div className="border-t border-border w-full" />
+          </div>
+        </div>
 
         {/* Flare Framework Auth Mode Tabs */}
         <div className="grid grid-cols-4 p-1 bg-muted/40 rounded-lg text-xs gap-0.5">

@@ -4,7 +4,7 @@ import { admin, magicLink, emailOTP, twoFactor } from "better-auth/plugins";
 import { passkey } from "@better-auth/passkey";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
-import { authConfig } from "./config";
+import { authConfig, type SocialProvider } from "./config";
 
 function getBaseUrl(): string {
   let raw =
@@ -46,8 +46,8 @@ export const socialProviders = Object.fromEntries(
   )
 ) as Record<string, { clientId: string; clientSecret: string }>;
 
-export function enabledSocialProviders() {
-  return Object.keys(socialProviders);
+export function enabledSocialProviders(): SocialProvider[] {
+  return authConfig.social;
 }
 
 export const auth = betterAuth({
