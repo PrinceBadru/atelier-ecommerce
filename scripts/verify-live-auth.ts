@@ -15,6 +15,7 @@ async function verifyAuth() {
   // 1. Visit Login Page & Verify Social Auth Methods
   console.log("\n[CHECK 1] Loading /login...");
   await page.goto(`${baseUrl}/login`, { waitUntil: "networkidle" });
+  await page.waitForSelector("#customer-email", { timeout: 15000 });
   await page.screenshot({ path: "live-login-clean.png" });
 
   const googleBtn = await page.locator('button[title*="Google"]').count();
@@ -49,6 +50,7 @@ async function verifyAuth() {
   // 2. Register a Real Account
   console.log("\n[CHECK 2] Registering authentic new user...");
   await page.goto(`${baseUrl}/register`, { waitUntil: "networkidle" });
+  await page.waitForSelector("#register-email", { timeout: 15000 });
   await page.screenshot({ path: "live-register-clean.png" });
 
   const regGoogleBtn = await page.locator('button[title*="Google"]').count();
