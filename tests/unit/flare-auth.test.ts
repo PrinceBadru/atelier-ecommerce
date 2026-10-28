@@ -15,10 +15,8 @@ describe("Flare Framework Authentication Configuration", () => {
     expect(authConfig.twoFactor.authenticator).toBe(true);
     expect(authConfig.twoFactor.email).toBe(true);
     expect(twoFactorAvailable).toBe(true);
-    expect(authConfig.social).toContain("google");
-    expect(authConfig.social).toContain("github");
-    expect(authConfig.social).toContain("microsoft");
-    expect(authConfig.social).toContain("apple");
+    // Flare Option A: social array is empty until credentials are configured
+    expect(Array.isArray(authConfig.social)).toBe(true);
   });
 
   it("checks password length boundaries correctly", () => {

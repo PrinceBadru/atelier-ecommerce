@@ -24,6 +24,7 @@ import {
   Check,
   X,
   ShieldAlert,
+  ShieldCheck,
 } from "lucide-react";
 
 function CustomerRegisterForm() {
@@ -97,6 +98,28 @@ function CustomerRegisterForm() {
     }
   };
 
+  const handleDemoSignIn = async (role: "shopper" | "admin" = "shopper") => {
+    setErrorMessage("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/demo-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role }),
+      });
+
+      if (!res.ok) throw new Error("Could not initialize test session");
+
+      router.push(role === "admin" ? "/admin" : callbackUrl);
+      router.refresh();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Test user sign in failed.";
+      setErrorMessage(msg);
+      setIsLoading(false);
+    }
+  };
+
   const scoreColors = [
     "bg-destructive/60",
     "bg-destructive",
@@ -127,25 +150,26 @@ function CustomerRegisterForm() {
       )}
 
       <div className="rounded-xl border border-border bg-surface p-6 shadow-elevation2 space-y-5">
-        {/* Social / OAuth Authentication Methods (Always accessible) */}
-        <div>
-          <SocialButtons
-            providers={providers.length > 0 ? providers : ["google", "github", "microsoft", "apple"]}
-            variant="icon"
-            next={callbackUrl}
-            currentEmail={email}
-            onError={(err) => setErrorMessage(err)}
-          />
+        {/* Flare Framework Option A: Social buttons only render if configured in environment */}
+        {providers.length > 0 && (
+          <div>
+            <SocialButtons
+              providers={providers}
+              variant="icon"
+              next={callbackUrl}
+              onError={(err) => setErrorMessage(err)}
+            />
 
-          {/* Divider */}
-          <div className="relative flex items-center justify-center my-4">
-            <div className="border-t border-border w-full" />
-            <span className="bg-surface px-3 text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-              or register with email
-            </span>
-            <div className="border-t border-border w-full" />
+            {/* Divider */}
+            <div className="relative flex items-center justify-center my-4">
+              <div className="border-t border-border w-full" />
+              <span className="bg-surface px-3 text-[11px] uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+                or register with email
+              </span>
+              <div className="border-t border-border w-full" />
+            </div>
           </div>
-        </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -276,6 +300,40 @@ function CustomerRegisterForm() {
             )}
           </Button>
         </form>
+
+        {/* One-Click Test Accounts */}
+        <div className="pt-4 border-t border-border space-y-2.5">
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+            <span className="font-medium text-foreground">One-Click Test Accounts</span>
+            <span className="text-[10px] bg-accent/10 text-accent font-medium px-2 py-0.5 rounded-full">Instant Access</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleDemoSignIn("shopper")}
+              disabled={isLoading}
+              className="w-full text-xs hover:border-accent/50 gap-1.5 h-9"
+              title="Sign in as Test User (Shopper Demo)"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
+              <span>Test User</span>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleDemoSignIn("admin")}
+              disabled={isLoading}
+              className="w-full text-xs hover:border-amber-500/50 gap-1.5 h-9"
+              title="Sign in as Studio Admin"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+              <span>Studio Admin</span>
+            </Button>
+          </div>
+        </div>
 
         <div className="pt-2 text-center text-xs text-muted-foreground border-t border-border">
           Already have an account?{" "}

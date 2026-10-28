@@ -47,7 +47,7 @@ export const socialProviders = Object.fromEntries(
 ) as Record<string, { clientId: string; clientSecret: string }>;
 
 export function enabledSocialProviders(): SocialProvider[] {
-  return authConfig.social;
+  return Object.keys(socialProviders) as SocialProvider[];
 }
 
 export const auth = betterAuth({

@@ -25,10 +25,10 @@ export const authConfig = {
   },
 
   /**
-   * Social sign-in providers supported. Each provider requires credentials in environment
-   * variables; without them, the UI displays a clean setup instructions card.
+   * Social sign-in. Flare Framework Option A: Each provider switches on only when its
+   * credentials are set in environment variables.
    */
-  social: ["google", "github", "apple", "microsoft"] as SocialProvider[],
+  social: [] as SocialProvider[],
 
   /** Refuse password sign-in until email is verified. */
   requireEmailVerification: false,
